@@ -112,3 +112,11 @@ const deleteProduct = async (req, res) => {
     console.log(error);
   }
 };
+
+export {
+  getAllProducts,
+  getSingleProduct,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+};
