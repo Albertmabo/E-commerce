@@ -79,7 +79,7 @@ const updateProduct = async (req, res) => {
       }
     );
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message: "Product updated successfully",
       data: product,
@@ -103,7 +103,7 @@ const deleteProduct = async (req, res) => {
       console.log(`No product found with id: ${productId}`);
     }
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message: "Product deleted successfully",
       data: null,
