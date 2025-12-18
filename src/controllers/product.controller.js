@@ -1,2 +1,2 @@
-import User from "../models/user"
+import Product from '../models/product.js';
 
