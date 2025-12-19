@@ -72,7 +72,7 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   const { id: userId } = req.params;
 
-  const user = await user.findOneAndDelete(userId);
+  const user = await User.findOneAndDelete(userId);
 
   res.status(200).json({
     success: true,
