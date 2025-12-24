@@ -7,7 +7,7 @@ import {
   updatedVendorShop,
   createVendorShop,
   deleteVendorShop,
-} from "../controllers/vendor.controller.js";
+} from "../controllers/vendorShop.controller.js";
 
 router.route("/").get(getAllVendorShops).post(createVendorShop);
 router
