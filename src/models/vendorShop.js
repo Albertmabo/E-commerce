@@ -13,6 +13,7 @@ const vendorShopSchema = new mongoose.Schema(
       mixlength: [30, "Shop name cannot be more then 30"],
       minlength: [3, "Shop name cannot be less then 2"],
       required: [true, "Shop Name cannot be empty"],
+      trim:true
     },
     address: {
       type: String,

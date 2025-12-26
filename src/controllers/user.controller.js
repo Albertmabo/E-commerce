@@ -25,12 +25,13 @@ const getAllUsers = asyncErrorHandler(async (req, res) => {
 const getSingleUser = asyncErrorHandler(async (req, res) => {
   const { id: userId } = req.params;
 
-  const user = await User.findOne(userId);
-  res.status(200).json({
+  const user = await User.findById(userId);
+
+  res.status(201).json({
     success: true,
     message: "User retrived successfully",
     data: user,
-  });
+  })
 });
 
 //@desc Create User

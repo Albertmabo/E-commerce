@@ -1,5 +1,6 @@
 import Product from "../models/product.js";
 import asyncErrorHandler from "../utils/asyncErrorHandler.js";
+import joi from "joi";
 
 //@desc Get All Products
 //@route GET api/v1/products
