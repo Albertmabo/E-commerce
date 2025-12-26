@@ -1,10 +1,11 @@
 import User from "../models/user.js";
+import asyncErrorHandler from "../utils/asyncErrorHandler.js";
 
 //@desc Get All Users
 //@route GET api/v1/users
 //@access Public
 
-const getAllUsers = async (req, res) => {
+const getAllUsers = asyncErrorHandler(async (req, res) => {
   const users = await User.find({});
 
   res.status(200).json({
@@ -15,13 +16,13 @@ const getAllUsers = async (req, res) => {
       total: users.length,
     },
   });
-};
+});
 
 //@desc Get Singe User
 //@route GET api/v1/users/:id
 //@access Public
 
-const getSingleUser = async (req, res) => {
+const getSingleUser = asyncErrorHandler(async (req, res) => {
   const { id: userId } = req.params;
 
   const user = await User.findOne(userId);
@@ -30,13 +31,13 @@ const getSingleUser = async (req, res) => {
     message: "User retrived successfully",
     data: user,
   });
-};
+});
 
 //@desc Create User
 //@route POST api/v1/users/:id
 //@access Public
 
-const createUser = async (req, res) => {
+const createUser = asyncErrorHandler(async (req, res) => {
   const user = await User.create(req.body);
 
   res.status(201).json({
@@ -44,13 +45,13 @@ const createUser = async (req, res) => {
     message: "User created successfully",
     data: user,
   });
-};
+});
 
 //@desc Update User
 //@route PATCH api/v1/users/:id
 //@access Public
 
-const updateUser = async (req, res) => {
+const updateUser = asyncErrorHandler(async (req, res) => {
   const { id: userId } = req.params;
 
   const user = await User.findOneAndUpdate({ _id: userId }, req.body, {
@@ -63,13 +64,13 @@ const updateUser = async (req, res) => {
     message: "User updated successfully",
     data: user,
   });
-};
+});
 
 //@desc Delete User
 //@route Delete api/v1/users/:id
 //@access Public
 
-const deleteUser = async (req, res) => {
+const deleteUser = asyncErrorHandler(async (req, res) => {
   const { id: userId } = req.params;
 
   const user = await User.findOneAndDelete(userId);
@@ -78,6 +79,6 @@ const deleteUser = async (req, res) => {
     success: true,
     message: "User deleted successfully",
   });
-};
+});
 
 export { getAllUsers, getSingleUser, createUser, updateUser, deleteUser };

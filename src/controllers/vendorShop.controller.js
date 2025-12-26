@@ -1,11 +1,12 @@
 import VendorShop from "../models/vendorShop.js";
 import User from "../models/user.js";
+import asyncErrorHandler from "../utils/asyncErrorHandler.js"
 
 //@desc Get VendorShop
 //@rotute GET api/v1/vendorshop
 //@access public
 
-const getAllVendorShops = async (req, res) => {
+const getAllVendorShops = asyncErrorHandler(async (req, res) => {
   const vendorShops = await VendorShop.find({}).select("-__v").populate({
     path: "user",
     select: "-__v",
@@ -18,13 +19,13 @@ const getAllVendorShops = async (req, res) => {
       total: vendorShops.length,
     },
   });
-};
+});
 
 //@desc Get sinble VendorShop
 //@rotute GET api/v1/vendorshop/:id
 //@access public
 
-const getVendorShop = async (req, res) => {
+const getVendorShop = asyncErrorHandler(async (req, res) => {
   const { id: vendorId } = req.params;
   const vendorShop = await VendorShop.findById(vendorId)
     .select("-__v")
@@ -44,13 +45,13 @@ const getVendorShop = async (req, res) => {
     message: "Vendor Shop retrived successfully",
     data: vendorShop,
   });
-};
+});
 
 //@desc Post VendorShop
 //@rotute POST api/v1/vendorshop
 //@access public
 
-const createVendorShop = async (req, res) => {
+const createVendorShop = asyncErrorHandler(async (req, res) => {
   const {
     user: userId,
     shopName,
@@ -83,12 +84,12 @@ const createVendorShop = async (req, res) => {
     message: "Vendor Shop created successfully",
     data: vendorShop,
   });
-};
+});
 //@desc Update VendorShop
 //@rotute PATCH api/v1/vendorshop/:id
 //@access public
 
-const updatedVendorShop = async (req, res) => {
+const updatedVendorShop = asyncErrorHandler(async (req, res) => {
   const { id: vendorId } = req.params;
   const vendorShop = await VendorShop.findOneAndUpdate(
     { _id: vendorId },
@@ -110,12 +111,12 @@ const updatedVendorShop = async (req, res) => {
     message: "Vendor Shop Updated successfully",
     data: vendorShop,
   });
-};
+});
 //@desc Delete VendorShop
 //@rotute DELETE api/v1/vendorshop/:id
 //@access public
 
-const deleteVendorShop = async (req, res) => {
+const deleteVendorShop = asyncErrorHandler(async (req, res) => {
   const { id: vendorId } = req.params;
 
   const vendorShop = await VendorShop.findOneAndDelete(vendorId);
@@ -125,7 +126,7 @@ const deleteVendorShop = async (req, res) => {
     message: "Vendor Shop Deleted successfully",
     data: null
   });
-};
+});
 export {
   getAllVendorShops,
   getVendorShop,
