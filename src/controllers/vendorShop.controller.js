@@ -89,7 +89,7 @@ const createVendorShop = asyncErrorHandler(async (req, res) => {
     shopRegistrationNumber: Joi.string().trim().required().messages({
       "string.base": "Shop registration number must be a string",
       "string.empty": "Shop registration number cannot be empty",
-      "any.required": "Shop registration numner is required",
+      "any.required": "Shop registration number is required",
     }),
     isVerified: Joi.boolean().default(false),
   });
