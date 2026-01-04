@@ -16,6 +16,7 @@ app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/vendors", vendorRoutes);
 
+
 app.use("/test", (req,res,next)=>{
     throw new CustomError(`Testing cusotmerror and global error`, 400)
 })

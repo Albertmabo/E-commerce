@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
 const userSchema = new mongoose.Schema(
   {
@@ -44,11 +45,31 @@ const userSchema = new mongoose.Schema(
       type: Date,
       required: [true, "Date of birth cannot be empty"],
     },
+    password: {
+      type: String,
+      required: [true, "Please enter a password"],
+    },
+    confirmPassword: {
+      type: String,
+      required: [true, "Please enter Confirm password"],
+      validate: {
+        validator: function (value) {
+          return value === this.password;
+        },
+        message: "Password and confirm password should be same",
+      },
+    },
   },
   {
     timestamps: true,
   }
 );
 
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
+
+  this.password = await bcrypt.hash(this.password, 12);
+  this.confirmPassword = undefined;
+});
 const User = mongoose.model("User", userSchema);
 export default User;

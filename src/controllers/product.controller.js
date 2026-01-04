@@ -10,6 +10,10 @@ import Joi from "joi";
 const getAllProducts = asyncErrorHandler(async (req, res) => {
   const products = await Product.find({});
 
+  if (!products) {
+    throw new CustomError(`There are not Products`, 404);
+  }
+
   res.status(200).json({
     success: true,
     message: "Product retrived successfully",
@@ -29,8 +33,7 @@ const getSingleProduct = asyncErrorHandler(async (req, res) => {
   const product = await Product.findById(productId);
 
   if (!product) {
-    // TODO: Replace console log with centralized error handling middleware
-    console.log(`No product found with id: ${productId}`);
+    throw new CustomError(`No product found with id`, 404);
   }
 
   res.status(200).json({
@@ -302,10 +305,15 @@ const createProduct = asyncErrorHandler(async (req, res) => {
 
 const updateProduct = asyncErrorHandler(async (req, res) => {
   const { id: productId } = req.params;
+
   const product = await Product.findOneAndUpdate({ _id: productId }, req.body, {
     new: true,
     runValidation: true,
   });
+
+  if (!product) {
+    throw new CustomError(`No product found with id`, 404);
+  }
 
   res.status(200).json({
     success: true,
@@ -321,11 +329,6 @@ const updateProduct = asyncErrorHandler(async (req, res) => {
 const deleteProduct = asyncErrorHandler(async (req, res) => {
   const { id: productId } = req.params;
   const product = await Product.findOneAndDelete(productId);
-
-  if (!product) {
-    // TODO: Replace console log with centralized error handling middleware
-    console.log(`No product found with id: ${productId}`);
-  }
 
   res.status(200).json({
     success: true,

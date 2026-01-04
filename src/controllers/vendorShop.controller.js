@@ -37,9 +37,7 @@ const getVendorShop = asyncErrorHandler(async (req, res) => {
     });
 
   if (!vendorShop) {
-    return res.status(404).json({
-      error: "VendorShop not found",
-    });
+    throw new CustomError("VendorShop not found", 404);
   }
 
   res.status(200).json({
@@ -95,14 +93,12 @@ const createVendorShop = asyncErrorHandler(async (req, res) => {
   });
 
   // validation
-  const {error, value} = vendorShopInputValidation.validate(req.body,{
+  const { error, value } = vendorShopInputValidation.validate(req.body, {
     abortEarly: true,
-  })
+  });
 
-  if(error){
-    throw new CustomError(
-       error.details.map((d) => d.message).join(", "), 400
-    )
+  if (error) {
+    throw new CustomError(error.details.map((d) => d.message).join(", "), 400);
   }
   const vendorShop = await VendorShop.create(value);
 
@@ -128,9 +124,7 @@ const updatedVendorShop = asyncErrorHandler(async (req, res) => {
   );
 
   if (!vendorShop) {
-    return res.status(404).json({
-      error: "No vendot shop avalilabe",
-    });
+    throw new CustomError("VendorShop not found", 404);
   }
 
   res.status(200).json({
