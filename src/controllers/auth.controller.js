@@ -1,5 +1,4 @@
 import User from "../models/user.js";
-
 import signToken from "../utils/signToken.js";
 import asyncErrorHandler from "../utils/asyncErrorHandler.js";
 
@@ -9,10 +8,11 @@ import asyncErrorHandler from "../utils/asyncErrorHandler.js";
 
 const sighUpUser = asyncErrorHandler(async (req, res) => {
   const user = await User.create(req.body);
+  const token = signToken(user._id, user.role)
 
   res.status(201).json({
     success: true,
-    message: "User created successfully 2",
+    message: "User created successfully",
     data: user,
     token,
   });
