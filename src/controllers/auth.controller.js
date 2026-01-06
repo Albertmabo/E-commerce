@@ -1,14 +1,18 @@
 import User from "../models/user.js";
 import signToken from "../utils/signToken.js";
+import CustomError from "../utils/CustomError.js";
 import asyncErrorHandler from "../utils/asyncErrorHandler.js";
 
 //@desc sighup User
 //@route POST api/v1/users/sighnup
 //@access Public
 
-const sighUpUser = asyncErrorHandler(async (req, res) => {
+const signUpUser = asyncErrorHandler(async (req, res) => {
   const user = await User.create(req.body);
-  const token = signToken(user._id, user.role)
+  if (!user) {
+    throw new CustomError("Fail to sign-up user", 400);
+  }
+  const token = signToken(user._id, user.role);
 
   res.status(201).json({
     success: true,
@@ -18,4 +22,5 @@ const sighUpUser = asyncErrorHandler(async (req, res) => {
   });
 });
 
-export { sighUpUser };
+
+export { signUpUser};
