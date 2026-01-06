@@ -1,4 +1,6 @@
 import User from "../models/user.js";
+
+import signToken from "../utils/signToken.js";
 import asyncErrorHandler from "../utils/asyncErrorHandler.js";
 
 //@desc sighup User
@@ -10,8 +12,9 @@ const sighUpUser = asyncErrorHandler(async (req, res) => {
 
   res.status(201).json({
     success: true,
-    message: "User created successfully",
+    message: "User created successfully 2",
     data: user,
+    token,
   });
 });
 
