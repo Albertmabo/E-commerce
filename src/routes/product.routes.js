@@ -1,5 +1,6 @@
 import express from "express";
 const router = express.Router();
+import protect from "../middlewares/protect.middleware.js";
 
 import {
   getAllProducts,
@@ -9,7 +10,7 @@ import {
   deleteProduct,
 } from "../controllers/product.controller.js";
 
-router.route("/").get(getAllProducts).post(createProduct);
+router.route("/").get(protect, getAllProducts).post(createProduct);
 router
   .route("/:id")
   .get(getSingleProduct)
