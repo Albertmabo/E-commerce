@@ -14,11 +14,18 @@ const signUpUser = asyncErrorHandler(async (req, res) => {
   }
   const token = signToken(user._id, user.role);
 
+  res.cookie("jwt", token, {
+    maxAge: 30 * 60 * 1000,
+    secure: false,
+    httpOnly: true,
+  });
+
   res.status(201).json({
     success: true,
     message: "User created successfully",
-    data: user,
-    token,
+    data: {
+      user
+    }
   });
 });
 
@@ -42,12 +49,18 @@ const logInUser = asyncErrorHandler(async (req, res) => {
   }
 
   const token = signToken(user._id, user.role);
+  res.cookie("jwt", token, {
+    maxAge: 30 * 60 * 1000,
+    secure:false,
+    httpOnly: true
+  })
 
   res.status(200).json({
     success: true,
     message: "User logged in successfully",
-    data: user,
-    token,
+    data: {
+      user
+    }
   });
 });
 
