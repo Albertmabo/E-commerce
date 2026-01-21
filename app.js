@@ -1,4 +1,5 @@
 import express from "express";
+import helmet  from "helmet";
 const app = express();
 
 // routes import
@@ -11,6 +12,7 @@ import routeNotFound from "./src/middlewares/routeNotFound.middleware.js"
 import globalErrorHandler from "./src/middlewares/globalErrorHandler.middleware.js"
 
 // middleware
+app.use(helmet());
 app.use(express.json());
 app.use("/api", rateLimiter(1000, 60 * 60 * 1000))
 // routes
