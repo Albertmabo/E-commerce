@@ -178,7 +178,7 @@ const productSchema = new mongoose.Schema(
       min:[0, "Warrenty cannot be less then 0 year"],
       max:[3, "wattenty cannot be more then 3 year"],
       required: [true, "Must provide the warranty detail"],
-    },
+    }, 
     featured: {
       type: Boolean,
       default: false,

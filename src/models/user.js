@@ -82,7 +82,7 @@ userSchema.methods.comparePasswordInDb = async function (
 };
 
 userSchema.methods.passwordStatus = function (JWTTime) {
-  if(this.isPasswordChangedAt){
+  if (this.isPasswordChangedAt) {
     const time = this.isPasswordChangedAt.getTime() / 1000;
     return JWTTime < time;
   }
