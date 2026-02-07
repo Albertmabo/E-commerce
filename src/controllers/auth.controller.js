@@ -19,6 +19,7 @@ const signUpUser = asyncErrorHandler(async (req, res) => {
     secure: false,
     httpOnly: true,
   });
+  user.password = undefined;
 
   res.status(201).json({
     success: true,
@@ -54,6 +55,9 @@ const logInUser = asyncErrorHandler(async (req, res) => {
     secure:false,
     httpOnly: true
   })
+  user.password = undefined;
+
+
 
   res.status(200).json({
     success: true,
