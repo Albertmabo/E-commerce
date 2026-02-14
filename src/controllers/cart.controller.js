@@ -9,7 +9,7 @@ import Product from "../models/product.js";
 //@access user
 
 const createCart = asyncErrorHandler(async (req, res) => {
-    const userId = req.user._id;
+    const {_id: userId} = req.user;
     let user = await User.findById(userId);
     if (!user) {
         throw new CustomError("You are not not registed please signed in again");
@@ -21,7 +21,7 @@ const createCart = asyncErrorHandler(async (req, res) => {
         return values.productId;
     });
 
-    for (let i = 0; i <= productId.length - 1; i++) {
+    for (let i = 0; i < productId.length ; i++) {
         let values = productId[i];
         let productExist = await Product.findById(values);
         if (!productExist) {
@@ -62,7 +62,7 @@ const createCart = asyncErrorHandler(async (req, res) => {
 //@access user
 
 const getCart = asyncErrorHandler(async (req, res) => {
-    const userId = req.user._id;
+    const {_id: userId} = req.user;
 
     const cart = await Cart.findOne({ user: userId });
     if (!cart) {
@@ -88,7 +88,7 @@ const getCart = asyncErrorHandler(async (req, res) => {
 //@access user
 
 const deleteCart = asyncErrorHandler(async (req, res) => {
-    const userId = req.user._id;
+    const {_id: userId} = req.user;
 
     // const cart = await Cart.findOne({ user: userId })
     const findCart = await Cart.findOne({ user: userId });

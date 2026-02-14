@@ -31,9 +31,10 @@ const orderSchema = new mongoose.Schema({
     },
     payment: {
         paymentType: {
+            default: "COD",
             type: String,
             enum: ["COD", "MobileBanking"],
-            required: [true, "Must provide Payment type"]
+            // required: [true, "Must provide Payment type"]
         },
         prePaid: {
             type: Boolean,
