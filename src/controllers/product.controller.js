@@ -280,18 +280,23 @@ const createProduct = asyncErrorHandler(async (req, res) => {
     featured: Joi.boolean().default(false),
     createdBy: Joi.string().trim().optional(),
     productImage: Joi.string().optional(),
+    discount: Joi.number().optional(),
   });
 
   // validaiton
   const { error, value } = productInputValidation.validate(req.body, {
-    abortEarly: true,
+    abortEarly: false,
   });
 
   if (error) {
-    throw new CustomError(error.details.map((d) => d.messages).join(", "), 400);
+    console.log("Joi validation error:", error.details);
+    throw new CustomError(
+      error.details.map(d => d.message).join(", "),
+      400
+    );
   }
 
-  const product = await Product.create(value);
+  const product = await Product.create({ ...value, createdBy: req.user._id });
 
   res.status(201).json({
     success: true,

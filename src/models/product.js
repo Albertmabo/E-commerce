@@ -187,6 +187,12 @@ const productSchema = new mongoose.Schema(
     productImage: {
       type: String,
     },
+    discount:{
+      type:Number,
+      max:[100, "Discount cannot be greater then 100 %"],
+      min: [0, "Discount cannot be less then 0%"],
+      default: 0
+    }
   },
   { timestamps: true }
 );

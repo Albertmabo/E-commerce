@@ -10,8 +10,6 @@ import Product from "../models/product.js";
 //@route POST api/v1/order
 //@access user
 const createOrder = asyncErrorHandler(async (req, res) => {
-  console.log(req.body);
-  
   const { _id: userId } = req.user;
 
   const user = await User.findById(userId);
@@ -29,40 +27,48 @@ const createOrder = asyncErrorHandler(async (req, res) => {
 
   const { items } = cart;
 
-  let productId = items.map((values) => {
-    return values.productId;
+  let product = items.map((values) => {
+    return {
+      productId: values.productId,
+      quantity: values.quantity,
+    };
   });
 
-  let totalquantity = items.map((values) => {
-    return values.quantity;
-  });
-
-  
   let total = 0;
 
-  for (let i = 0; i < productId.length; i++) {
-    let id = productId[i];
+  for (let i = 0; i < product.length; i++) {
+    let id = product[i].productId;
+
     let p = await Product.findById(id);
-    total += p.price * totalquantity[i];
+
+    if (p.discount) {
+      console.log("HIT diccoutn");
+
+      let cost = p.price * product[i].quantity;
+      total = p.price - cost * (p.discount / 100);
+    } else {
+      console.log("NOt doscount");
+
+      total += p.price * product[i].quantity;
+    }
   }
 
   const order = await Order.create({
     user: req.user._id,
     items,
     total,
-    payment: req.body
+    payment: req.body,
   });
 
-  res.status(200).json({
+  res.status(201).json({
     message: "order places successfully",
     order,
-   
   });
 });
 
 //@desc create order
 //@route GET api/v1/cart
 //@access user
-const getOrder = asyncErrorHandler(async (req, res) => { });
+const getOrder = asyncErrorHandler(async (req, res) => {});
 
 export { createOrder, getOrder };
