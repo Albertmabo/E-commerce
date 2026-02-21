@@ -24,9 +24,7 @@ app.use("/api/v1/vendors", vendorRoutes);
 app.use("/api/v1/cart", cartRoutes);
 app.use("/api/v1/order", orderRoutes);
 
-app.use("/test", (req, res, next) => {
-  throw new CustomError(`Testing cusotmerror and global error`, 400);
-});
+
 
 // rotue not found
 app.use(routeNotFound);

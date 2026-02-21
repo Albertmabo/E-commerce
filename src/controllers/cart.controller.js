@@ -90,7 +90,6 @@ const getCart = asyncErrorHandler(async (req, res) => {
 const deleteCart = asyncErrorHandler(async (req, res) => {
     const {_id: userId} = req.user;
 
-    // const cart = await Cart.findOne({ user: userId })
     const findCart = await Cart.findOne({ user: userId });
     if (!findCart) {
         throw new CustomError("Cart does not exist", 404);

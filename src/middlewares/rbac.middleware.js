@@ -22,6 +22,9 @@ const vendorAccess = (req, res, next) => {
   }
 };
 
+
+
+
 const userAccess = (req, res, next) => {
   if (req.user.role === "user") {
     next();

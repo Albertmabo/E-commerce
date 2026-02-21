@@ -40,12 +40,12 @@ const createOrder = asyncErrorHandler(async (req, res) => {
     let id = product[i].productId;
 
     let p = await Product.findById(id);
-
+    
     if (p.discount) {
       console.log("HIT diccoutn");
 
       let cost = p.price * product[i].quantity;
-      total = cost - (cost * (p.discount / 100));
+      total += cost - (cost * (p.discount / 100));
     } else {
       console.log("NOt doscount");
 
