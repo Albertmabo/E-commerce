@@ -1,8 +1,8 @@
 import VendorShop from "../models/vendorShop.js";
 import User from "../models/user.js";
 import asyncErrorHandler from "../utils/asyncErrorHandler.js";
-import Joi from "joi";
 import CustomError from "../utils/CustomError.js";
+import Joi from "joi";
 
 //@desc Get VendorShop
 //@rotute GET api/v1/vendorshop
@@ -29,12 +29,11 @@ const getAllVendorShops = asyncErrorHandler(async (req, res) => {
 
 const getVendorShop = asyncErrorHandler(async (req, res) => {
   const { id: vendorId } = req.params;
-  const vendorShop = await VendorShop.findById(vendorId)
-    .select("-__v")
-    .populate({
-      path: "user",
-      select: "-__v",
-    });
+  const vendorShop = await VendorShop.findById(vendorId);
+
+  await vendorShop.populate({
+    path: "user",
+  });
 
   if (!vendorShop) {
     throw new CustomError("VendorShop not found", 404);
@@ -52,7 +51,7 @@ const getVendorShop = asyncErrorHandler(async (req, res) => {
 //@access public
 
 const createVendorShop = asyncErrorHandler(async (req, res) => {
-  const { user: userId } = req.body;
+  const { _id: userId } = req.user;
 
   // Check if the user exist
   const user = await User.findOne({ _id: userId });
@@ -66,11 +65,6 @@ const createVendorShop = asyncErrorHandler(async (req, res) => {
   }
 
   const vendorShopInputValidation = Joi.object({
-    user: Joi.string().length(24).hex().required().messages({
-      "string.length": "Invalid user ID",
-      "string.hex": "Invalid user ID, Only hex value",
-      "any.required": "User is required to create Vendor Shop",
-    }),
     shopName: Joi.string().trim().min(3).max(30).required().messages({
       "string.base": "Name of the shop shoud be string",
       "string.empty": "Shop name cannot be empty",
@@ -100,7 +94,7 @@ const createVendorShop = asyncErrorHandler(async (req, res) => {
   if (error) {
     throw new CustomError(error.details.map((d) => d.message).join(", "), 400);
   }
-  const vendorShop = await VendorShop.create(value);
+  const vendorShop = await VendorShop.create({ user: userId, ...value });
 
   res.status(201).json({
     success: true,
@@ -120,7 +114,7 @@ const updatedVendorShop = asyncErrorHandler(async (req, res) => {
     {
       new: true,
       runValidators: true,
-    }
+    },
   );
 
   if (!vendorShop) {

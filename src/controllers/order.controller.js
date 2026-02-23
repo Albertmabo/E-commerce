@@ -49,16 +49,17 @@ const createOrder = asyncErrorHandler(async (req, res) => {
     }
   }
 
-  
-
   const order = await Order.create({
     user: req.user._id,
     items,
     total,
     payment: req.body,
   });
- 
-  await order.populate({path:"user",select:"-role -dateOfBirth -createdAt -updatedAt -__v"})
+
+  await order.populate({
+    path: "user",
+    select: "-role -dateOfBirth -createdAt -updatedAt -__v",
+  });
 
   res.status(201).json({
     message: "order places successfully",
@@ -71,7 +72,7 @@ const createOrder = asyncErrorHandler(async (req, res) => {
 //@access user
 const getOrder = asyncErrorHandler(async (req, res) => {
   const order = await Order.findOne({ user: req.user.id });
-  
+
   if (!order) {
     throw new CustomError("Order is empty, create order", 404);
   }

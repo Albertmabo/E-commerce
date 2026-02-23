@@ -22,12 +22,6 @@ const vendorAccess = (req, res, next) => {
   }
 };
 
-
-
-
-
-
-
 const userAccess = (req, res, next) => {
   if (req.user.role === "user") {
     next();
@@ -40,9 +34,6 @@ const userAccess = (req, res, next) => {
 };
 
 const access = (req, res, next) => {
-
-
-
   if (req.user.role === "vendor" || req.user.role === "admin") {
     next();
   } else {
@@ -54,8 +45,6 @@ const access = (req, res, next) => {
 };
 
 const userAndAdminAccess = (req, res, next) => {
-
-
   if (req.user.role === "user" || req.user.role === "admin") {
     next();
   } else {
