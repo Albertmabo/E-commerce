@@ -40,15 +40,11 @@ const createOrder = asyncErrorHandler(async (req, res) => {
     let id = product[i].productId;
 
     let p = await Product.findById(id);
-    
+
     if (p.discount) {
-      console.log("HIT diccoutn");
-
       let cost = p.price * product[i].quantity;
-      total += cost - (cost * (p.discount / 100));
+      total += cost - cost * (p.discount / 100);
     } else {
-      console.log("NOt doscount");
-
       total += p.price * product[i].quantity;
     }
   }
@@ -60,6 +56,8 @@ const createOrder = asyncErrorHandler(async (req, res) => {
     payment: req.body,
   });
 
+  console.log(order);
+
   res.status(201).json({
     message: "order places successfully",
     order,
@@ -69,6 +67,18 @@ const createOrder = asyncErrorHandler(async (req, res) => {
 //@desc create order
 //@route GET api/v1/cart
 //@access user
-const getOrder = asyncErrorHandler(async (req, res) => {});
+const getOrder = asyncErrorHandler(async (req, res) => {
+  const order = await Order.findOne({ user: req.user.id });
+  console.log(order);
+
+  if (!order) {
+    throw new CustomError("Order is empty, create order", 404);
+  }
+  res.status(200).json({
+    success: true,
+    message: "order retrived successfully",
+    order,
+  });
+});
 
 export { createOrder, getOrder };

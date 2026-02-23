@@ -94,8 +94,7 @@ const deleteCart = asyncErrorHandler(async (req, res) => {
     if (!findCart) {
         throw new CustomError("Cart does not exist", 404);
     }
-
-    const cart = await Cart.findByIdAndDelete(findCart._id);
+    await Cart.findByIdAndDelete(findCart._id);
 
     res.status(200).json({
         success: true,
