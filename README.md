@@ -683,20 +683,39 @@ Response: 201 Created
 {
     "message": "order places successfully",
     "order": {
-        "user": "69983fe64727eeab5d0fe024",
+        "user": {
+            "_id": "69983fe64727eeab5d0fe024",
+            "firstName": "John",
+            "middleName": "Blank",
+            "lastName": "Doe",
+            "email": "jdb@gmail.com",
+            "phoneNo": "+97798726374589",
+            "address": "789 Pokhara Road, Nepal"
+        },
         "items": [
             {
+                "productId": "69724daa999b1191d0aee8a8",
+                "quantity": 45,
+                "_id": "699c0b3efe6964cfc3ead1b4"
+            },
+            {
+                "productId": "6992b9d48c19b51df0c4d583",
+                "quantity": 3333,
+                "_id": "699c0b3efe6964cfc3ead1b5"
+            },
+            {
                 "productId": "699934cf6372ecdb3982f05a",
-                "quantity": 22,
-                "_id": "699937626372ecdb3982f086"
+                "quantity": 566,
+                "_id": "699c0b3efe6964cfc3ead1b6"
             }
         ],
-        "total": 28600,
+        "total": 21735140,
         "payment": {
             "paymentType": "COD",
             "prePaid": false
         },
-        "_id": "6999379c6372ecdb3982f08e",
+        "orderStatus": "Processing",
+        "_id": "699c783159431a6f4e47897a",
         "__v": 0
     }
 }
@@ -794,7 +813,7 @@ package-lock.json
 
 ### Authentication & Authorization
 
-- **JWT Tokens**: Stateless authentication with short-lived access tokens
+- **JWT Tokens**: Stateless authentication access tokens
 - **Password Hashing**: bcrypt with 12 salt rounds
 - **Role-Based Access Control**: Admin Vedor and User roles with permission checks
 
@@ -1164,6 +1183,12 @@ const orderSchema = new mongoose.Schema({
       default: false,
     },
   },
+  orderStatus: {
+    type: String,
+    default: "Processing",
+    required: [true, "Must provide order status "],
+    enum: ["Processing", "Shipped", "Delivered"],
+  },
 });
 
 orderSchema.pre("save", function () {
@@ -1174,6 +1199,7 @@ orderSchema.pre("save", function () {
 
 const Order = mongoose.model("Order", orderSchema);
 export default Order;
+
 ```
 
 ### Cart Model

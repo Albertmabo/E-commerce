@@ -25,6 +25,9 @@ const vendorAccess = (req, res, next) => {
 
 
 
+
+
+
 const userAccess = (req, res, next) => {
   if (req.user.role === "user") {
     next();
@@ -37,8 +40,8 @@ const userAccess = (req, res, next) => {
 };
 
 const access = (req, res, next) => {
-  console.log(req.user.role);
-  console.log(req.user.role === "vendor");
+
+
 
   if (req.user.role === "vendor" || req.user.role === "admin") {
     next();
@@ -50,4 +53,17 @@ const access = (req, res, next) => {
   }
 };
 
-export { adminAccess, vendorAccess, userAccess, access };
+const userAndAdminAccess = (req, res, next) => {
+
+
+  if (req.user.role === "user" || req.user.role === "admin") {
+    next();
+  } else {
+    throw new CustomError(
+      "You dont have the permission for this operation",
+      401,
+    );
+  }
+};
+
+export { adminAccess, vendorAccess, userAccess, access, userAndAdminAccess };
