@@ -546,7 +546,132 @@ Response: 200Ok
 ```
 
 ---
+### Vednor Endpoints
 
+#### Create vendor Shop (Vednor)
+```http
+POST /api/v1/vednor
+Authorization: Bearer <token>
+
+{
+    "shopName": "Tech Haven",
+    "address": "123 Silicon Street, Kathmandu, Nepal",
+    "ratings": "4.5",
+    "shopRegistrationNumber": "REG-2025-001",
+    "isVerified": true
+}
+
+Response: 201 Created
+{
+{
+    "success": true,
+    "message": "Vendor Shop created successfully",
+    "data": {
+        "user": "*******************",
+        "shopName": "Tech Haven",
+        "address": "123 Silicon Street, Kathmandu, Nepal",
+        "ratings": "4.5",
+        "shopRegistrationNumber": "REG-2025-001",
+        "isVerified": true,
+        "_id": "****************",
+        "createdAt": "2026-02-23T18:32:45.872Z",
+        "updatedAt": "2026-02-23T18:32:45.872Z",
+        "__v": 0
+    }
+}
+```
+
+#### GET vendor Shop (Vedndor)
+```http
+GET /api/v1/vednor
+Authorization: Bearer <token>
+
+{
+    "shopName": "Tech Haven",
+    "address": "123 Silicon Street, Kathmandu, Nepal",
+    "ratings": "4.5",
+    "shopRegistrationNumber": "REG-2025-001",
+    "isVerified": true
+}
+
+Response: 201 Created
+{
+    "success": true,
+    "message": "Vendor Shop retrived successfully",
+    "data": {
+        "_id": ""*********************",",
+        "user": {
+            "_id": "*********************",
+            "firstName": "alx",
+            "middleName": "Kumar",
+            "lastName": "Thapa",
+            "email": "ake@gamdil.com",
+            "phoneNo": "+9779823456789",
+            "role": "vendor",
+            "address": "789 Pokhara Road, Nepal",
+            "dateOfBirth": "1992-11-10T00:00:00.000Z",
+            "createdAt": "2026-02-23T18:02:16.192Z",
+            "updatedAt": "2026-02-23T18:02:16.192Z",
+            "__v": 0
+        },
+        "shopName": "Tech Haven",
+        "address": "123 Silicon Street, Kathmandu, Nepal",
+        "ratings": "4.5",
+        "shopRegistrationNumber": "REG-2025-001",
+        "isVerified": true,
+        "createdAt": "2026-02-23T18:16:31.115Z",
+        "updatedAt": "2026-02-23T18:16:31.115Z",
+        "__v": 0
+    }
+}
+```
+
+### Update vendor Shop (Vedndor)
+```http
+PATCH /api/v1/vednor
+Authorization: Bearer <token>
+
+{
+    "shopName": "Tech Haven",
+    "address": "123 Silicoaaaaaa Street, Kathmandu, Nepal",
+    "ratings": "4.5",
+    "shopRegistrationNumber": "REG-2025-001",
+    "isVerified": true
+}
+
+Response: 200 OK
+{
+    "success": true,
+    "message": "Vendor Shop Updated successfully",
+    "data": {
+        "_id": "699c9d4d494283bccb89a87a",
+        "user": "699c96283fe1291ad2dbd26c",
+        "shopName": "Tech Haven",
+        "address": "123 Silicoaaaaaa Street, Kathmandu, Nepal",
+        "ratings": "4.5",
+        "shopRegistrationNumber": "REG-2025-001",
+        "isVerified": true,
+        "createdAt": "2026-02-23T18:32:45.872Z",
+        "updatedAt": "2026-02-23T18:41:00.112Z",
+        "__v": 0
+    }
+}
+```
+### Delete vendor Shop (Vedndor & admin)
+```http
+DELETE /api/v1/vednor
+Authorization: Bearer <token>
+
+Response: 200 OK
+{
+    "success": true,
+    "message": "Vendor Shop Deleted successfully",
+    "data": null
+}
+
+
+```
+---
 ### Cart Endpoints
 
 #### Get User Cart (User)

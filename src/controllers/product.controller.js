@@ -73,6 +73,8 @@ const createProduct = asyncErrorHandler(async (req, res) => {
 //@access Public
 
 const updateProduct = asyncErrorHandler(async (req, res) => {
+  console.log("HIT");
+  
   const { id: productId } = req.params;
 
   const product = await Product.findOneAndUpdate({ _id: productId }, req.body, {

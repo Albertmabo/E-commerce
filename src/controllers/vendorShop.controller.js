@@ -2,24 +2,27 @@ import VendorShop from "../models/vendorShop.js";
 import User from "../models/user.js";
 import asyncErrorHandler from "../utils/asyncErrorHandler.js";
 import CustomError from "../utils/CustomError.js";
-import Joi from "joi";
-
+import vendorShopInputValidation from "../validations/vendorShop.validation.js";
 //@desc Get VendorShop
 //@rotute GET api/v1/vendorshop
 //@access public
 
 const getAllVendorShops = asyncErrorHandler(async (req, res) => {
-  const vendorShops = await VendorShop.find({}).select("-__v").populate({
+  const { _id: userId } = req.user;
+  const vendorShop = await VendorShop.findOne({ user: userId });
+
+  await vendorShop.populate({
     path: "user",
-    select: "-__v",
   });
+
+  if (!vendorShop) {
+    throw new CustomError("VendorShop not found", 404);
+  }
+
   res.status(200).json({
     success: true,
     message: "Vendor Shop retrived successfully",
-    data: vendorShops,
-    meta: {
-      total: vendorShops.length,
-    },
+    data: vendorShop,
   });
 });
 
@@ -28,8 +31,8 @@ const getAllVendorShops = asyncErrorHandler(async (req, res) => {
 //@access public
 
 const getVendorShop = asyncErrorHandler(async (req, res) => {
-  const { id: vendorId } = req.params;
-  const vendorShop = await VendorShop.findById(vendorId);
+  const { _id: userId } = req.user;
+  const vendorShop = await VendorShop.findById(userId);
 
   await vendorShop.populate({
     path: "user",
@@ -64,28 +67,6 @@ const createVendorShop = asyncErrorHandler(async (req, res) => {
     throw new CustomError("User is not a vendor", 400);
   }
 
-  const vendorShopInputValidation = Joi.object({
-    shopName: Joi.string().trim().min(3).max(30).required().messages({
-      "string.base": "Name of the shop shoud be string",
-      "string.empty": "Shop name cannot be empty",
-      "string.min": "Shop name cannot be less then 3 characters",
-      "string.max": "Shop name cannot be more then 30 characters",
-      "any.required": "Shop name cannot be empty",
-    }),
-    address: Joi.string().trim().required().messages({
-      "string.base": "Shop address should be string",
-      "string.empty": "Shop address cannot be empty",
-      "any.required": "Shop address cannot be empty",
-    }),
-    ratings: Joi.string().optional(),
-    shopRegistrationNumber: Joi.string().trim().required().messages({
-      "string.base": "Shop registration number must be a string",
-      "string.empty": "Shop registration number cannot be empty",
-      "any.required": "Shop registration number is required",
-    }),
-    isVerified: Joi.boolean().default(false),
-  });
-
   // validation
   const { error, value } = vendorShopInputValidation.validate(req.body, {
     abortEarly: true,
@@ -107,9 +88,10 @@ const createVendorShop = asyncErrorHandler(async (req, res) => {
 //@access public
 
 const updatedVendorShop = asyncErrorHandler(async (req, res) => {
-  const { id: vendorId } = req.params;
+  const { _id: userId } = req.user;
+
   const vendorShop = await VendorShop.findOneAndUpdate(
-    { _id: vendorId },
+    { user: userId },
     req.body,
     {
       new: true,
@@ -132,9 +114,9 @@ const updatedVendorShop = asyncErrorHandler(async (req, res) => {
 //@access public
 
 const deleteVendorShop = asyncErrorHandler(async (req, res) => {
-  const { id: vendorId } = req.params;
+  const { _id: userId } = req.user;
 
-  const vendorShop = await VendorShop.findOneAndDelete(vendorId);
+   await VendorShop.findOneAndDelete({ user: userId });
 
   res.status(200).json({
     success: true,
