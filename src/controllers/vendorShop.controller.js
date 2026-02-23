@@ -26,29 +26,6 @@ const getAllVendorShops = asyncErrorHandler(async (req, res) => {
   });
 });
 
-//@desc Get sinble VendorShop
-//@rotute GET api/v1/vendorshop/:id
-//@access public
-
-const getVendorShop = asyncErrorHandler(async (req, res) => {
-  const { _id: userId } = req.user;
-  const vendorShop = await VendorShop.findById(userId);
-
-  await vendorShop.populate({
-    path: "user",
-  });
-
-  if (!vendorShop) {
-    throw new CustomError("VendorShop not found", 404);
-  }
-
-  res.status(200).json({
-    success: true,
-    message: "Vendor Shop retrived successfully",
-    data: vendorShop,
-  });
-});
-
 //@desc Post VendorShop
 //@rotute POST api/v1/vendorshop
 //@access public
@@ -116,7 +93,7 @@ const updatedVendorShop = asyncErrorHandler(async (req, res) => {
 const deleteVendorShop = asyncErrorHandler(async (req, res) => {
   const { _id: userId } = req.user;
 
-   await VendorShop.findOneAndDelete({ user: userId });
+  await VendorShop.findOneAndDelete({ user: userId });
 
   res.status(200).json({
     success: true,
@@ -126,7 +103,6 @@ const deleteVendorShop = asyncErrorHandler(async (req, res) => {
 });
 export {
   getAllVendorShops,
-  getVendorShop,
   createVendorShop,
   updatedVendorShop,
   deleteVendorShop,

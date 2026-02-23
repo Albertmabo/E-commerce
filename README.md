@@ -183,15 +183,14 @@ Development: http://localhost:3000/api/v1
 - `GET /api/v1/products/:id` - Get single product
 - `POST /api/v1/products` - Create product (Vendor)
 - `PATCH /api/v1/products/:id` - Update product (Vendor)
-- `DELETE /api/v1/products/:id` - Delete product (Vendot & Admin)
+- `DELETE /api/v1/products/:id` - Delete product (Vendor & Admin)
 
-#### Vendors
+#### Vendor shop
 
-- `GET /api/v1/vendors` – Retrieve all vendors
-- `GET /api/v1/vendors/:id` – Retrieve a single vendor
-- `POST /api/v1/vendors` – Create a new vendor
-- `PATCH /api/v1/vendors/:id` – Update a vendor
-- `DELETE /api/v1/vendors/:id` – Delete a vendor
+- `GET /api/v1/vendors` – Retrieve all vendors shop (vendor)
+- `POST /api/v1/vendors` – Create a new vendor (vendor)
+- `PATCH /api/v1/vendors` – Update a vendor (vednor)
+- `DELETE /api/v1/vendors` – Delete a vendor (vendor and admin)
 
 ### Cart
 
@@ -421,10 +420,51 @@ Authorization: Bearer <vedndor_token>
 Content-Type: application/json
 
 {
+    "name": "Microsoft Surface Pro X",
+    "price": 1200,
+    "rating": "4.3",
+    "os": "Windows",
+    "brand": "Microsoft",
+    "type": "Mid Range",
+    "category": "Business",
+    "inStock": true,
+    "processor": "Intel Core i5-1240P",
+    "ram": {
+        "size": 16,
+        "speed": 3200,
+        "ramType": "DDR4"
+    },
+    "storage": {
+        "storageType": "SSD",
+        "storageSize": 512
+    },
+    "display": {
+        "displayType": "LED",
+        "displaySize": 13.5,
+        "displayResolution":"2560x1440"
+    },
+    "graphicCard": {
+        "graphicCardBrand": "Intel",
+        "graphicVram": 2,
+        "tgp": 35,
+        "series": "Intel Iris Xe"
+    },
+    "battery": {
+        "capacity": 50
+    },
+    "weight": 1.3,
+    "warranty": 1,
+    "featured": false,
+    "createdBy": "admin",
+    "productImage": "surface_laptop5.jpg"
+}
+
+Response: 201 Created
+{
     "success": true,
     "message": "Product created successfully",
     "data": {
-        "name": "Microsoft Surface Laptop 4",
+        "name": "Microsoft Surface Pro X",
         "price": 1200,
         "rating": "4.3",
         "os": "Windows",
@@ -459,17 +499,29 @@ Content-Type: application/json
         "weight": 1.3,
         "warranty": 1,
         "featured": false,
-        "createdBy": "****************",
+        "soldBy": {
+            "_id": "*********************",
+            "user": ""*********************",",
+            "shopName": "Tech Haven",
+            "address": "123 Silicoaaaaaa Street, Kathmandu, Nepal",
+            "ratings": "4.5",
+            "shopRegistrationNumber": "REG-2025-001",
+            "isVerified": true,
+            "createdAt": "2026-02-23T19:07:40.889Z",
+            "updatedAt": "2026-02-23T19:07:40.889Z",
+            "__v": 0
+        },
         "productImage": "surface_laptop5.jpg",
         "discount": 0,
-        "_id": "*****************",
-        "createdAt": "2026-02-21T04:30:07.435Z",
-        "updatedAt": "2026-02-21T04:30:07.435Z",
+        "_id": "699ca99d1083791e77d710a9",
+        "createdAt": "2026-02-23T19:25:17.222Z",
+        "updatedAt": "2026-02-23T19:25:17.222Z",
         "__v": 0
     }
 }
+}
 
-Response: 201 Created
+
 ```
 
 #### Update Product (Vednor Only)
@@ -920,6 +972,9 @@ ecommerce-backend/
 │   │   ├── asyncErrorHandler.js       # Async error wrapper
 │   │   ├── CustomError.js           # Custom error class
 │   │   └── sighToken.js         # for token
+│   ├── validations/
+│   │   ├── vendorShop.validation.js      # JOI validation logic
+│   │   ├── product.validation.js             
 ├── .env.development
 ├── .env.production
 ├── app.js

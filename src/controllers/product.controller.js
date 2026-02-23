@@ -2,7 +2,7 @@ import Product from "../models/product.js";
 import asyncErrorHandler from "../utils/asyncErrorHandler.js";
 import CustomError from "../utils/CustomError.js";
 import productInputValidation from "../validations/product.validation.js";
-
+import VendorShop from "../models/vendorShop.js";
 //@desc Get All Products
 //@route GET api/v1/products
 //@access Public
@@ -48,6 +48,7 @@ const getSingleProduct = asyncErrorHandler(async (req, res) => {
 //@access Public
 
 const createProduct = asyncErrorHandler(async (req, res) => {
+  const { _id: userId } = req.user;
   const { error, value } = productInputValidation.validate(req.body, {
     abortEarly: false,
   });
@@ -59,7 +60,16 @@ const createProduct = asyncErrorHandler(async (req, res) => {
     );
   }
 
-  const product = await Product.create({ ...value, createdBy: req.user._id });
+  const vendorShop = await VendorShop.findOne({ user: userId });
+
+  const product = await Product.create({
+    ...value,
+    soldBy: vendorShop._id,
+  });
+
+  await product.populate({
+    path: "soldBy",
+  });
 
   res.status(201).json({
     success: true,
@@ -74,7 +84,7 @@ const createProduct = asyncErrorHandler(async (req, res) => {
 
 const updateProduct = asyncErrorHandler(async (req, res) => {
   console.log("HIT");
-  
+
   const { id: productId } = req.params;
 
   const product = await Product.findOneAndUpdate({ _id: productId }, req.body, {

@@ -183,14 +183,18 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    createdBy: String,
+    soldBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref:"VendorShop",
+      required: true
+    },
     productImage: {
       type: String,
     },
     discount:{
       type:Number,
       max:[100, "Discount cannot be greater then 100 %"],
-      min: [0, "Discount cannot be less then 0%"],
+      min: [0, "Discount cannot be less then 0%"],  
       default: 0
     }
   },
