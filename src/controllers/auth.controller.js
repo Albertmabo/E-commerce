@@ -2,6 +2,7 @@ import User from "../models/user.js";
 import signToken from "../utils/signToken.js";
 import CustomError from "../utils/CustomError.js";
 import asyncErrorHandler from "../utils/asyncErrorHandler.js";
+import logInUserInputValidation from "../validations/logInUsers.validation.js";
 
 //@desc sighup User
 //@route POST api/v1/users/sighnup
@@ -25,8 +26,8 @@ const signUpUser = asyncErrorHandler(async (req, res) => {
     success: true,
     message: "User created successfully",
     data: {
-      user
-    }
+      user,
+    },
   });
 });
 
@@ -35,10 +36,21 @@ const signUpUser = asyncErrorHandler(async (req, res) => {
 //@access Public
 
 const logInUser = asyncErrorHandler(async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    throw new CustomError("Please provide email and password", 400);
+  const { error, value } = logInUserInputValidation.validate(req.body, {
+    abortEarly: true,
+  });
+
+  if (error) {
+    throw new CustomError(
+      error.details.map((value) => {
+        return value.message;
+      }),
+      400,
+    );
   }
+
+  const { email, password } = value;
+
   const user = await User.findOne({ email }).select("+password");
   if (!user) {
     throw new CustomError("Invalid email or password", 401);
@@ -52,19 +64,17 @@ const logInUser = asyncErrorHandler(async (req, res) => {
   const token = signToken(user._id, user.role);
   res.cookie("jwt", token, {
     maxAge: 30 * 60 * 1000,
-    secure:false,
-    httpOnly: true
-  })
+    secure: false,
+    httpOnly: true,
+  });
   user.password = undefined;
-
-
 
   res.status(200).json({
     success: true,
     message: "User logged in successfully",
     data: {
-      user
-    }
+      user,
+    },
   });
 });
 

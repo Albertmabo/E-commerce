@@ -58,7 +58,6 @@ const createOrder = asyncErrorHandler(async (req, res) => {
 
   await order.populate({
     path: "user",
-    select: "-role -dateOfBirth -createdAt -updatedAt -__v",
   });
 
   res.status(201).json({

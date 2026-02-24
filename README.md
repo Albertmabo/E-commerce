@@ -974,7 +974,8 @@ ecommerce-backend/
 │   │   └── sighToken.js         # for token
 │   ├── validations/
 │   │   ├── vendorShop.validation.js      # JOI validation logic
-│   │   ├── product.validation.js             
+│   │   ├── product.validation.js 
+│   │   ├── logInUsers.validation.js               
 ├── .env.development
 ├── .env.production
 ├── app.js

@@ -5,7 +5,7 @@ import CustomError from "../utils/CustomError.js";
 import vendorShopInputValidation from "../validations/vendorShop.validation.js";
 //@desc Get VendorShop
 //@rotute GET api/v1/vendorshop
-//@access public
+//@access vendor
 
 const getAllVendorShops = asyncErrorHandler(async (req, res) => {
   const { _id: userId } = req.user;
@@ -28,7 +28,7 @@ const getAllVendorShops = asyncErrorHandler(async (req, res) => {
 
 //@desc Post VendorShop
 //@rotute POST api/v1/vendorshop
-//@access public
+//@access vedor
 
 const createVendorShop = asyncErrorHandler(async (req, res) => {
   const { _id: userId } = req.user;
@@ -61,8 +61,8 @@ const createVendorShop = asyncErrorHandler(async (req, res) => {
   });
 });
 //@desc Update VendorShop
-//@rotute PATCH api/v1/vendorshop/:id
-//@access public
+//@rotute PATCH api/v1/vendorshop
+//@access vendor
 
 const updatedVendorShop = asyncErrorHandler(async (req, res) => {
   const { _id: userId } = req.user;
@@ -87,8 +87,8 @@ const updatedVendorShop = asyncErrorHandler(async (req, res) => {
   });
 });
 //@desc Delete VendorShop
-//@rotute DELETE api/v1/vendorshop/:id
-//@access public
+//@rotute DELETE api/v1/vendorshop
+//@access admin and vendor
 
 const deleteVendorShop = asyncErrorHandler(async (req, res) => {
   const { _id: userId } = req.user;
