@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema(
     firstName: {
       type: String,
       required: true,
+      trim: true,
       minlength: [3, "First Name cannot be be less then 3"],
       maxlength: [20, "First Name cannot be greater then 20 character"],
     },
@@ -27,7 +28,9 @@ const userSchema = new mongoose.Schema(
     },
     phoneNo: {
       type: String,
-      required: [true, "Phone No cannot be empty"],
+      required: [true, "Please provie your contact number"],
+      maxlength: [15, "Contact number cannot be grater then 15 chracter"],
+      minlength: [6, "Contact number cannot be less then 5 charcter"],
     },
 
     role: {
@@ -39,6 +42,8 @@ const userSchema = new mongoose.Schema(
 
     address: {
       type: String,
+      maxlength: [150, "Address cannot be grater then 15 chracter"],
+      minlength: [6, "Address cannot be less then 5 charcter"],
       required: [true, "Address cannot be empty"],
     },
     dateOfBirth: {

@@ -3,16 +3,30 @@ import signToken from "../utils/signToken.js";
 import CustomError from "../utils/CustomError.js";
 import asyncErrorHandler from "../utils/asyncErrorHandler.js";
 import logInUserInputValidation from "../validations/logInUsers.validation.js";
-
+import signUpUserInputValidation from "../validations/signUpUser.validation.js";
 //@desc sighup User
 //@route POST api/v1/users/sighnup
 //@access Public
 
 const signUpUser = asyncErrorHandler(async (req, res) => {
-  const user = await User.create(req.body);
+  const { error, value } = signUpUserInputValidation.validate(req.body, {
+    abortEarly: true,
+  });
+  if (error) {
+    throw new CustomError(
+      error.details.map((value) => {
+        return value.message;
+      }),
+      400,
+    );
+  }
+
+  const user = await User.create(value);
+
   if (!user) {
     throw new CustomError("Fail to sign-up user", 400);
   }
+  
   const token = signToken(user._id, user.role);
 
   res.cookie("jwt", token, {

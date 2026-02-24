@@ -975,7 +975,8 @@ ecommerce-backend/
 │   ├── validations/
 │   │   ├── vendorShop.validation.js      # JOI validation logic
 │   │   ├── product.validation.js 
-│   │   ├── logInUsers.validation.js               
+│   │   ├── logInUsers.validation.js    
+│   │   ├── signUpUser.validation.js             
 ├── .env.development
 ├── .env.production
 ├── app.js
@@ -1026,6 +1027,7 @@ const userSchema = new mongoose.Schema(
     firstName: {
       type: String,
       required: true,
+      trim: true,
       minlength: [3, "First Name cannot be be less then 3"],
       maxlength: [20, "First Name cannot be greater then 20 character"],
     },
@@ -1047,7 +1049,9 @@ const userSchema = new mongoose.Schema(
     },
     phoneNo: {
       type: String,
-      required: [true, "Phone No cannot be empty"],
+        required: [true, "Please provie your contact number"],
+        maxlength: [15, "Contact number cannot be grater then 15 chracter"],
+        minlength: [6, "Contact number cannot be less then 5 charcter"],
     },
 
     role: {
@@ -1067,6 +1071,7 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
+      minlength: [6, "Password cannot be be less then 3"],
       required: [true, "Please enter a password"],
       select: false,
     },
@@ -1111,6 +1116,7 @@ userSchema.methods.passwordStatus = function (JWTTime) {
 
 const User = mongoose.model("User", userSchema);
 export default User;
+
 ```
 
 ### Product Model
