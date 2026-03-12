@@ -1,13 +1,12 @@
 import jwt from "jsonwebtoken";
 
-const signToken = (id, role) => {
+const signToken = (id) => {
   return jwt.sign(
     {
-      id,
-      role,
+      id
     },
     process.env.SECRET_STRING,
-    { expiresIn: process.env.LOGIN_EXPIRES }
+    { expiresIn: process.env.LOGIN_EXPIRES },
   );
 };
 

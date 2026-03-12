@@ -1,7 +1,8 @@
 import dotenv from "dotenv";
 
-process.env.NODE_ENV === "production" ? dotenv.config({ path: ".env.production" }) : dotenv.config({ path: ".env.development" });
-
+process.env.NODE_ENV === "production"
+  ? dotenv.config({ path: ".env.production" })
+  : dotenv.config({ path: ".env.development" });
 
 import app from "./app.js";
 import connectDB from "./src/db/connect.js";
@@ -12,10 +13,6 @@ const start = async () => {
   try {
     await connectDB(process.env.URL);
     app.listen(PORT, () => {
-
-
-
-
       console.log(`Server is running in PORT ${PORT}`);
     });
   } catch (error) {

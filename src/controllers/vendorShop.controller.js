@@ -50,7 +50,10 @@ const createVendorShop = asyncErrorHandler(async (req, res) => {
   });
 
   if (error) {
-    throw new CustomError(error.details.map((d) => d.message).join(", "), 400);
+    throw new CustomError(
+      error.details.map((d) => d.message),
+      400,
+    );
   }
   const vendorShop = await VendorShop.create({ user: userId, ...value });
 

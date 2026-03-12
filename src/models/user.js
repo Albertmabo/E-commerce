@@ -87,7 +87,7 @@ userSchema.methods.comparePasswordInDb = async function (
   return await bcrypt.compare(inputtedPassword, savedPassword);
 };
 
-userSchema.methods.passwordStatus = function (JWTTime) {
+userSchema.methods.isPasswordChanged = function (JWTTime) {
   if (this.isPasswordChangedAt) {
     const time = this.isPasswordChangedAt.getTime() / 1000;
     return JWTTime < time;

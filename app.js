@@ -24,8 +24,6 @@ app.use("/api/v1/vendors", vendorRoutes);
 app.use("/api/v1/cart", cartRoutes);
 app.use("/api/v1/order", orderRoutes);
 
-
-
 // rotue not found
 app.use(routeNotFound);
 // Global error handler

@@ -24,7 +24,7 @@ RESTful API for an e-commerce platform built with Node.js, Express, and MongoDB 
 
 ### Core Functionality
 
-- **User Authentication** - JWT-based secure authentication with refresh tokens
+- **User Authentication** - JWT-based secure authentication 
 - **Role-Based Access Control (RBAC)** - Admin, User and Vendor roles with different permissions
 - **Product Management** - Complete CRUD operations for products
 - **Shopping Cart** - Add, update, remove items calculation
@@ -911,28 +911,7 @@ Response: 200 OK
 }
 ```
 
-<!--
-#### Get Order by ID
-```http
-GET /api/v1/orders/:id
-Authorization: Bearer <token>
 
-Response: 200 OK
-``` -->
-
-<!-- #### Update Order Status (Admin Only)
-```http
-PATCH /api/v1/orders/:id/status
-Authorization: Bearer <admin_token>
-
-{
-  "status": "shipped"
-}
-
-Response: 200 OK
-```
-
---- -->
 
 ---
 
@@ -1122,6 +1101,7 @@ export default User;
 ### Product Model
 
 ```javascript
+
 import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema(
@@ -1284,44 +1264,49 @@ const productSchema = new mongoose.Schema(
     battery: {
       capacity: {
         type: Number,
-        required: [true, "Must provide battery capicity"],
-        max: [120, "The maximum battery capacity is 120 Watt hour"],
-        min: [20, "The minimum battery capaitcy is 20 watt hour"],
-      },
+        required:[true, "Must provide battery capicity"],
+        max:[120, "The maximum battery capacity is 120 Watt hour"],
+        min:[20, "The minimum battery capaitcy is 20 watt hour"]
+      }
     },
     weight: {
       type: Number,
-      required: true,
-      max: [6, "Laptop cannot be more then 6 kg"],
-      min: [1, "Laptop cannot be less then 1 kg"],
+      required: true,  
+      max:[6, "Laptop cannot be more then 6 kg"],
+      min:[1, "Laptop cannot be less then 1 kg"]
     },
     warranty: {
       type: Number,
       default: 1,
-      min: [0, "Warrenty cannot be less then 0 year"],
-      max: [3, "wattenty cannot be more then 3 year"],
+      min:[0, "Warrenty cannot be less then 0 year"],
+      max:[3, "wattenty cannot be more then 3 year"],
       required: [true, "Must provide the warranty detail"],
-    },
+    }, 
     featured: {
       type: Boolean,
       default: false,
     },
-    createdBy: String,
+    soldBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref:"VendorShop",
+      required: true
+    },
     productImage: {
       type: String,
     },
-    discount: {
-      type: Number,
-      max: [100, "Discount cannot be greater then 100 %"],
-      min: [0, "Discount cannot be less then 0%"],
-      default: 0,
-    },
+    discount:{
+      type:Number,
+      max:[100, "Discount cannot be greater then 100 %"],
+      min: [0, "Discount cannot be less then 0%"],  
+      default: 0
+    }
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 const Product = mongoose.model("Product", productSchema);
 export default Product;
+
 ```
 
 ### Order Model

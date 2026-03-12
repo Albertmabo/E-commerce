@@ -4,6 +4,7 @@ import CustomError from "../utils/CustomError.js";
 import asyncErrorHandler from "../utils/asyncErrorHandler.js";
 import logInUserInputValidation from "../validations/logInUsers.validation.js";
 import signUpUserInputValidation from "../validations/signUpUser.validation.js";
+
 //@desc sighup User
 //@route POST api/v1/users/sighnup
 //@access Public
@@ -26,8 +27,8 @@ const signUpUser = asyncErrorHandler(async (req, res) => {
   if (!user) {
     throw new CustomError("Fail to sign-up user", 400);
   }
-  
-  const token = signToken(user._id, user.role);
+
+  const token = signToken(user._id);
 
   res.cookie("jwt", token, {
     maxAge: 30 * 60 * 1000,
@@ -75,7 +76,7 @@ const logInUser = asyncErrorHandler(async (req, res) => {
     throw new CustomError("Invalid email or password", 401);
   }
 
-  const token = signToken(user._id, user.role);
+  const token = signToken(user._id);
   res.cookie("jwt", token, {
     maxAge: 30 * 60 * 1000,
     secure: false,
