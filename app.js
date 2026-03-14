@@ -10,6 +10,7 @@ import vendorRoutes from "./src/routes/vendorShop.routes.js";
 import cartRoutes from "./src/routes/cart.routes.js";
 import orderRoutes from "./src/routes/order.routes.js";
 import paymentRoutes from "./src/routes/payment.routes.js";
+import userRoutes from "./src/routes/user.routes.js";
 import CustomError from "./src/utils/CustomError.js";
 import routeNotFound from "./src/middlewares/routeNotFound.middleware.js";
 import globalErrorHandler from "./src/middlewares/globalErrorHandler.middleware.js";
@@ -25,6 +26,7 @@ app.use("/api/v1/vendors", vendorRoutes);
 app.use("/api/v1/cart", cartRoutes);
 app.use("/api/v1/order", orderRoutes);
 app.use("/api/v1/payment", paymentRoutes);
+app.use("/api/v1/users", userRoutes);
 
 // rotue not found
 app.use(routeNotFound);

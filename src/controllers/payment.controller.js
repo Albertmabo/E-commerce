@@ -20,6 +20,7 @@ const createPayment = asyncErrorHandler(async (req, res) => {
   }
 
   const pay = await Payment.create({
+    user: order.user,
     order: order._id,
     payment,
   });
