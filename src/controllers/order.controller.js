@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import asyncErrorHandler from "../utils/asyncErrorHandler.js";
 import CustomError from "../utils/CustomError.js";
 import User from "../models/user.js";
@@ -10,6 +9,8 @@ import Product from "../models/product.js";
 //@route POST api/v1/order
 //@access user
 const createOrder = asyncErrorHandler(async (req, res) => {
+  const { orderStatus } = req.body || {};
+
   const { _id: userId } = req.user;
 
   const user = await User.findById(userId);
@@ -49,18 +50,35 @@ const createOrder = asyncErrorHandler(async (req, res) => {
     }
   }
 
-  const order = await Order.create({
-    user: req.user._id,
-    items,
-    total,
-    payment: req.body,
-  });
+  const orders = await Order.findOne({ user: userId });
+  let order;
+  if (!orders) {
+    order = await Order.create({
+      user: req.user._id,
+      items,
+      total,
+      orderStatus,
+    });
+  } else {
+    order = await Order.findOneAndUpdate(
+      { user: userId },
+      {
+        $set: { items, total, orderStatus },
+  
+      },
+      {
+        new: true,
+        runValidators: true
+      }
+    );
+  }
 
-  await order.populate({
-    path: "user",
-  });
+  // await order.populate({
+  //   path: "user",
+  // });
 
   res.status(201).json({
+    success: true,
     message: "order places successfully",
     order,
   });

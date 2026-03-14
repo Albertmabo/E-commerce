@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 
 const protect = asyncErrorHandler(async (req, res, next) => {
+  console.log("HIT");
+  
   let testToken = req.headers.authorization;
   if (!testToken) {
     throw new CustomError("Please login or sighup", 401);
@@ -13,7 +15,7 @@ const protect = asyncErrorHandler(async (req, res, next) => {
     testToken = testToken.split(" ")[1];
   } else throw new CustomError("Token does not start with bearer");
 
-  const decodedToken = jwt.verify(testToken, process.env.SECRET_STR);
+  const decodedToken = jwt.verify(testToken, process.env.SECRET_STRING);
 
   const user = await User.findById(decodedToken.id);
 
