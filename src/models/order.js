@@ -29,18 +29,7 @@ const orderSchema = new mongoose.Schema({
     type: Number,
     required: [true, "Total price cannot be empty"],
   },
-  payment: {
-    paymentType: {
-      default: "COD",
-      type: String,
-      enum: ["COD", "MobileBanking"],
-      // required: [true, "Must provide Payment type"]
-    },
-    prePaid: {
-      type: Boolean,
-      default: false,
-    },
-  },
+
   orderStatus: {
     type: String,
     default: "Processing",
@@ -49,11 +38,7 @@ const orderSchema = new mongoose.Schema({
   },
 });
 
-orderSchema.pre("save", function () {
-  if (this.payment.paymentType === "MobileBanking") {
-    this.payment.prePaid = true;
-  }
-});
+
 
 const Order = mongoose.model("Order", orderSchema);
 export default Order;

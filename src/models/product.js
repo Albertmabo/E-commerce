@@ -196,6 +196,9 @@ const productSchema = new mongoose.Schema(
       max:[100, "Discount cannot be greater then 100 %"],
       min: [0, "Discount cannot be less then 0%"],  
       default: 0
+    },
+    ratings:{
+      
     }
   },
   { timestamps: true }
