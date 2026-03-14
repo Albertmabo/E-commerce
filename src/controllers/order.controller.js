@@ -64,12 +64,11 @@ const createOrder = asyncErrorHandler(async (req, res) => {
       { user: userId },
       {
         $set: { items, total, orderStatus },
-  
       },
       {
         new: true,
-        runValidators: true
-      }
+        runValidators: true,
+      },
     );
   }
 
