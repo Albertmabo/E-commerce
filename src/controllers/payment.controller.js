@@ -23,7 +23,9 @@ const createPayment = asyncErrorHandler(async (req, res) => {
     user: order.user,
     order: order._id,
     payment,
+    date: Date.now()
   });
+ 
 
   await pay.populate({
     path: "order",
@@ -31,10 +33,7 @@ const createPayment = asyncErrorHandler(async (req, res) => {
 
   let onSuccess =
     pay.payment.paymentSuccess && pay.order.orderStatus === "Delivered";
-
-  if (onSuccess) {
-    await Order.findByIdAndDelete(order._id);
-  }
+  console.log(onSuccess);
 
   if (onSuccess) {
     await Cart.findOneAndDelete({ user: id });
@@ -44,6 +43,7 @@ const createPayment = asyncErrorHandler(async (req, res) => {
     success: true,
     message: "Payment successful",
     pay,
+
   });
 });
 

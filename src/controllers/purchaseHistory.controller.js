@@ -9,15 +9,22 @@ import Product from "../models/product.js";
 //@route GET api/v1/users/history
 //@access User
 
-const getAllHistory = asyncErrorHandler(async (req, res) => {
+const getHistory = asyncErrorHandler(async (req, res) => {
   const { id } = req.user;
+  
 
-  const history = await Payment.find();
+  const history = await Payment.findOne({ user: id });
 
+  if (!history) {
+    throw new CustomError("No History found, Happy shopping", 400);
+  }
+  await history.populate({
+    path: "order",
+  });
   res.status(200).json({
     success: true,
     history,
   });
 });
 
-export { getAllHistory };
+export { getHistory };

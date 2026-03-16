@@ -1,27 +1,30 @@
 import mongoose from "mongoose";
 
-const paymentSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: [true, "User must be asscociated with a Orders"],
-  },
-  order: {
-    type: mongoose.Schema.ObjectId,
-    ref: "Order",
-  },
-  payment: {
-    paymentType: {
-      default: "COD",
-      type: String,
-      enum: ["COD", "MobileBanking"],
+const paymentSchema = new mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: [true, "User must be asscociated with a Orders"],
     },
-    paymentSuccess: {
-      type: Boolean,
-      default: false,
+    order: {
+      type: mongoose.Schema.ObjectId,
+      ref: "Order",
+    },
+    payment: {
+      paymentType: {
+        default: "COD",
+        type: String,
+        enum: ["COD", "MobileBanking"],
+      },
+      paymentSuccess: {
+        type: Boolean,
+        default: false,
+      },
     },
   },
-});
+  { timestamps: true },
+);
 
 paymentSchema.pre("save", function () {
   if (this.payment.paymentType === "MobileBanking") {
