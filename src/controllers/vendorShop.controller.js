@@ -32,6 +32,8 @@ const getAllVendorShops = asyncErrorHandler(async (req, res) => {
 
 const createVendorShop = asyncErrorHandler(async (req, res) => {
   const { _id: userId } = req.user;
+  console.log(userId);
+  
 
   // Check if the user exist
   const user = await User.findOne({ _id: userId });

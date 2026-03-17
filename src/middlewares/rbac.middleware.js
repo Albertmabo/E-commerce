@@ -12,6 +12,10 @@ const adminAccess = (req, res, next) => {
 };
 
 const vendorAccess = (req, res, next) => {
+  console.log(req.user.role);
+  console.log("HIT and next");
+  
+  
   if (req.user.role === "vendor") {
     next();
   } else {

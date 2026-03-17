@@ -16,9 +16,6 @@ const productSchema = new mongoose.Schema(
       required: [true, "Must provide price"],
       min: [0, "Price cannot be less then zero"],
     },
-    rating: {
-      type: String,
-    },
     os: {
       type: String,
       trim: true,
@@ -197,12 +194,17 @@ const productSchema = new mongoose.Schema(
       min: [0, "Discount cannot be less then 0%"],  
       default: 0
     },
-    ratings:{
-      
-    }
+    ratings:[{
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"Ratings",
+  
+    }]
   },
   { timestamps: true }
 );
 
 const Product = mongoose.model("Product", productSchema);
 export default Product;
+/**
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YjgxZWU2ZmIzYmQ1NzhiZWIxNTY3NyIsImlhdCI6MTc3MzY3NDIxNSwiZXhwIjoxNzc2MjY2MjE1fQ.tZBt83nSNZbwzcm1ZDuDBl2Uoq_v_csQPpofQt1OdGg
+ */

@@ -228,6 +228,8 @@ const productInputValidation = Joi.object({
   createdBy: Joi.string().trim().optional(),
   productImage: Joi.string().optional(),
   discount: Joi.number().optional(),
+  soldBy: Joi.string().optional(),
+  ratings: Joi.array().items(Joi.string()).optional(),
 });
 
 export default productInputValidation;

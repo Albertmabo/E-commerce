@@ -35,6 +35,13 @@ const getSingleProduct = asyncErrorHandler(async (req, res) => {
   if (!product) {
     throw new CustomError(`No product found with id`, 404);
   }
+  await product.populate({
+    path: "soldBy",
+  });
+
+  await product.populate({
+    path: "ratings",
+  });
 
   res.status(200).json({
     success: true,
@@ -61,15 +68,13 @@ const createProduct = asyncErrorHandler(async (req, res) => {
   }
 
   const vendorShop = await VendorShop.findOne({ user: userId });
+  console.log("Vednor shop", vendorShop);
 
   const product = await Product.create({
     ...value,
     soldBy: vendorShop._id,
   });
 
-  await product.populate({
-    path: "soldBy",
-  });
 
   res.status(201).json({
     success: true,
