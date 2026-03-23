@@ -4,6 +4,7 @@ import User from "../models/user.js";
 import Cart from "../models/cart.js";
 import Order from "../models/order.js";
 import Product from "../models/product.js";
+import { sendResponse } from "../utils/apiResponse.js";
 
 //@desc create order
 //@route POST api/v1/order
@@ -72,19 +73,11 @@ const createOrder = asyncErrorHandler(async (req, res) => {
     );
   }
 
-  // await order.populate({
-  //   path: "user",
-  // });
-
-  res.status(201).json({
-    success: true,
-    message: "order places successfully",
-    order,
-  });
+  sendResponse(res, "Order places successfully", order, 201);
 });
 
 //@desc create order
-//@route GET api/v1/cart
+//@route GET api/v1/order
 //@access user
 const getOrder = asyncErrorHandler(async (req, res) => {
   const order = await Order.findOne({ user: req.user.id });
@@ -92,11 +85,8 @@ const getOrder = asyncErrorHandler(async (req, res) => {
   if (!order) {
     throw new CustomError("Order is empty, create order", 404);
   }
-  res.status(200).json({
-    success: true,
-    message: "order retrived successfully",
-    order,
-  });
+
+  sendResponse(res, "Order retrived successfully", order, 200);
 });
 
 export { createOrder, getOrder };

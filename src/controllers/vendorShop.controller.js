@@ -3,6 +3,7 @@ import User from "../models/user.js";
 import asyncErrorHandler from "../utils/asyncErrorHandler.js";
 import CustomError from "../utils/CustomError.js";
 import vendorShopInputValidation from "../validations/vendorShop.validation.js";
+import { sendResponse } from "../utils/apiResponse.js";
 //@desc Get VendorShop
 //@rotute GET api/v1/vendorshop
 //@access vendor
@@ -19,11 +20,7 @@ const getAllVendorShops = asyncErrorHandler(async (req, res) => {
     throw new CustomError("VendorShop not found", 404);
   }
 
-  res.status(200).json({
-    success: true,
-    message: "Vendor Shop retrived successfully",
-    data: vendorShop,
-  });
+  sendResponse(res, "Vendor Shop retrived successfully", vendorShop, 200);
 });
 
 //@desc Post VendorShop
@@ -33,7 +30,6 @@ const getAllVendorShops = asyncErrorHandler(async (req, res) => {
 const createVendorShop = asyncErrorHandler(async (req, res) => {
   const { _id: userId } = req.user;
   console.log(userId);
-  
 
   // Check if the user exist
   const user = await User.findOne({ _id: userId });
@@ -59,11 +55,7 @@ const createVendorShop = asyncErrorHandler(async (req, res) => {
   }
   const vendorShop = await VendorShop.create({ user: userId, ...value });
 
-  res.status(201).json({
-    success: true,
-    message: "Vendor Shop created successfully",
-    data: vendorShop,
-  });
+  sendResponse(res, "Vendor Shop created successfully", vendorShop, 201);
 });
 //@desc Update VendorShop
 //@rotute PATCH api/v1/vendorshop
@@ -85,11 +77,7 @@ const updatedVendorShop = asyncErrorHandler(async (req, res) => {
     throw new CustomError("VendorShop not found", 404);
   }
 
-  res.status(200).json({
-    success: true,
-    message: "Vendor Shop Updated successfully",
-    data: vendorShop,
-  });
+  sendResponse(res, "Vendor Shop Updated successfully", vendorShop, 200);
 });
 //@desc Delete VendorShop
 //@rotute DELETE api/v1/vendorshop
@@ -100,11 +88,7 @@ const deleteVendorShop = asyncErrorHandler(async (req, res) => {
 
   await VendorShop.findOneAndDelete({ user: userId });
 
-  res.status(200).json({
-    success: true,
-    message: "Vendor Shop Deleted successfully",
-    data: null,
-  });
+  sendResponse(res, "Vendor Shop Deleted successfully");
 });
 export {
   getAllVendorShops,

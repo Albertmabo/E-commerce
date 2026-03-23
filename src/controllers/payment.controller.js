@@ -1,11 +1,11 @@
 import asyncErrorHandler from "../utils/asyncErrorHandler.js";
 import CustomError from "../utils/CustomError.js";
-import User from "../models/user.js";
+
 import Cart from "../models/cart.js";
 import Order from "../models/order.js";
-import Product from "../models/product.js";
-import Payment from "../models/payment.js";
 
+import Payment from "../models/payment.js";
+import { sendResponse } from "../utils/apiResponse.js";
 //@desc create payment
 //@route POST api/v1/payment
 //@access user
@@ -23,9 +23,8 @@ const createPayment = asyncErrorHandler(async (req, res) => {
     user: order.user,
     order: order._id,
     payment,
-    date: Date.now()
+    date: Date.now(),
   });
- 
 
   await pay.populate({
     path: "order",
@@ -33,18 +32,12 @@ const createPayment = asyncErrorHandler(async (req, res) => {
 
   let onSuccess =
     pay.payment.paymentSuccess && pay.order.orderStatus === "Delivered";
-  console.log(onSuccess);
 
   if (onSuccess) {
     await Cart.findOneAndDelete({ user: id });
   }
 
-  res.status(201).json({
-    success: true,
-    message: "Payment successful",
-    pay,
-
-  });
+  sendResponse(res, "Payment successful", pay, 201);
 });
 
 export { createPayment };

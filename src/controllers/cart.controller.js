@@ -3,6 +3,7 @@ import CustomError from "../utils/CustomError.js";
 import Cart from "../models/cart.js";
 import User from "../models/user.js";
 import Product from "../models/product.js";
+import {sendResponse }from "../utils/apiResponse.js"
 
 //@desc create cart
 //@route POST api/v1/cart
@@ -49,12 +50,8 @@ const createCart = asyncErrorHandler(async (req, res) => {
         );
     }
 
-    res.status(200).json({
-        success: true,
-        data: {
-            cart,
-        },
-    });
+
+    sendResponse(res,"Cart created succssfully", cart, 200);
 });
 
 //@desc get cart
@@ -69,18 +66,9 @@ const getCart = asyncErrorHandler(async (req, res) => {
         throw new CustomError("Cart does not exist please make a cart", 404);
     }
 
-    let cartItems = cart.items;
-    let itemQuantity = cart.items.length;
+    sendResponse(res,"Cart retrieved successfully",cart,200 )
 
-    res.status(200).json({
-        message: "Cart retrieved successfully",
-        data: {
-            cartItems,
-        },
-        meta: {
-            noOfItems: itemQuantity,
-        },
-    });
+
 });
 
 //@desc Delete cart
@@ -100,6 +88,10 @@ const deleteCart = asyncErrorHandler(async (req, res) => {
         success: true,
         message: "Cart deleted successfully",
     });
+
+    sendResponse(res,"Cart deleted successfully")
+
+
 });
 
 export { createCart, getCart, deleteCart };

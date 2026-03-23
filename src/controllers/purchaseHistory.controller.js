@@ -1,7 +1,7 @@
 import asyncErrorHandler from "../utils/asyncErrorHandler.js";
 import Payment from "../models/payment.js";
 import CustomError from "../utils/CustomError.js";
-
+import { sendResponse } from "../utils/apiResponse.js";
 
 //@desc Get User purchse history
 //@route GET api/v1/users/history
@@ -9,7 +9,6 @@ import CustomError from "../utils/CustomError.js";
 
 const getHistory = asyncErrorHandler(async (req, res) => {
   const { id } = req.user;
-  
 
   const history = await Payment.findOne({ user: id });
 
@@ -19,10 +18,8 @@ const getHistory = asyncErrorHandler(async (req, res) => {
   await history.populate({
     path: "order",
   });
-  res.status(200).json({
-    success: true,
-    history,
-  });
+
+  sendResponse(res, "History Retrieved successfully", history, 200);
 });
 
 export { getHistory };

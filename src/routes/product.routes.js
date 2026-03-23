@@ -13,6 +13,7 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
+  getCategory
 } from "../controllers/product.controller.js";
 
 import { rateProduct } from "../controllers/ratings.controller.js";
@@ -27,5 +28,10 @@ router
   .patch(protect, vendorAccess, updateProduct)
   .delete(protect, access, deleteProduct);
 
+
 router.route("/ratings/:id").post(protect, userAccess, rateProduct);
+
+
+router.route("/category/:field").get(getCategory)
+
 export default router;

@@ -5,6 +5,7 @@ import asyncErrorHandler from "../utils/asyncErrorHandler.js";
 import logInUserInputValidation from "../validations/logInUsers.validation.js";
 import signUpUserInputValidation from "../validations/signUpUser.validation.js";
 
+
 //@desc sighup User
 //@route POST api/v1/users/sighnup
 //@access Public

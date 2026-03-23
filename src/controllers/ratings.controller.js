@@ -3,6 +3,7 @@ import Payment from "../models/payment.js";
 import CustomError from "../utils/CustomError.js";
 import Ratings from "../models/ratings.js";
 import Product from "../models/product.js";
+import { sendResponse } from "../utils/apiResponse.js";
 
 //@desc POST User review
 //@route post api/v1/ratings/:id
@@ -10,9 +11,6 @@ import Product from "../models/product.js";
 
 const rateProduct = asyncErrorHandler(async (req, res) => {
   const { id: user } = req.user;
-  console.log(user);
-  // only alow verfiled purchase to rate
-  console.log(req.params.id);
 
   const product = await Product.findOne({ _id: req.params.id });
   if (!product) {
@@ -23,8 +21,12 @@ const rateProduct = asyncErrorHandler(async (req, res) => {
   if (!isVerfied) {
     throw new CustomError("You have not purchesed this product yet", 404);
   }
-
-  console.log(isVerfied);
+  /*
+  const isVerified = await Payment.findOne({ 
+  user, 
+  order: { $in: await Order.find({ "items.product": req.params.id }).select("_id") }
+});
+  */
 
   if (!isVerfied.payment.paymentSuccess) {
     throw new CustomError(
@@ -35,7 +37,7 @@ const rateProduct = asyncErrorHandler(async (req, res) => {
 
   const rating = await Ratings.create({
     user,
-    Product,
+    product,
     rating: req.body.rating,
     review: req.body.review,
   });
@@ -48,11 +50,7 @@ const rateProduct = asyncErrorHandler(async (req, res) => {
   product.ratings.push(rating._id);
   await product.save();
 
-  res.status(200).json({
-    success: true,
-    message: "Product review successfully",
-    rating,
-  });
+  sendResponse(res, "Product review successfully", rating, 200);
 });
 
 export { rateProduct };
