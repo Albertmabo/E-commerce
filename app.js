@@ -21,7 +21,7 @@ app.use(express.json({ limit: "30kb" }));
 app.use("/api", rateLimiter(1000, 60 * 60 * 1000));
 // routes
 app.use("/api/v1/products", productRoutes);
-app.use("/api/v1/users", authRoutes);
+app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/vendors", vendorRoutes);
 app.use("/api/v1/cart", cartRoutes);
 app.use("/api/v1/order", orderRoutes);

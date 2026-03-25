@@ -11,14 +11,15 @@ import { sendResponse } from "../utils/apiResponse.js";
 const getAllVendorShops = asyncErrorHandler(async (req, res) => {
   const { _id: userId } = req.user;
   const vendorShop = await VendorShop.findOne({ user: userId });
+    if (!vendorShop) {
+    throw new CustomError("VendorShop not found", 404);
+  }
 
   await vendorShop.populate({
     path: "user",
   });
 
-  if (!vendorShop) {
-    throw new CustomError("VendorShop not found", 404);
-  }
+
 
   sendResponse(res, "Vendor Shop retrived successfully", vendorShop, 200);
 });
