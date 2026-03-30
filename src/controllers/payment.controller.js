@@ -24,9 +24,7 @@ const createPayment = asyncErrorHandler(async (req, res) => {
     order: order._id,
     payment,
     date: Date.now(),
-  });
-
-  await pay.populate({
+  }).populate({
     path: "order",
   });
 

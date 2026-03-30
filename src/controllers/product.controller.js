@@ -4,24 +4,23 @@ import CustomError from "../utils/CustomError.js";
 import productInputValidation from "../validations/product.validation.js";
 import VendorShop from "../models/vendorShop.js";
 import { sendResponse } from "../utils/apiResponse.js";
+import qs from "qs";
 //@desc Get All Products
 //@route GET api/v1/products
 //@access Public
 
 const getAllProducts = asyncErrorHandler(async (req, res) => {
-  const products = await Product.find({});
 
-  if (!products) {
+    
+  const products = await Product.find(req.query).populate({
+    path:"soldBy"
+  })
+
+  if (!products.length) {
     throw new CustomError(`There are not Products`, 404);
   }
 
-  sendResponse(
-    res,
-    "Product retrived successfully",
-    products,
-    200,
-    products.length,
-  );
+  sendResponse(res, "All Product", products, 200, products.length);
 });
 
 //@desc Get Single Product
@@ -30,18 +29,13 @@ const getAllProducts = asyncErrorHandler(async (req, res) => {
 
 const getSingleProduct = asyncErrorHandler(async (req, res) => {
   const { id: productId } = req.params;
-  const product = await Product.findById(productId);
-
-  if (!product) {
-    throw new CustomError(`No product found with id`, 404);
-  }
-  await product.populate({
+  const product = await Product.findById(productId).populate({
     path: "soldBy",
   });
 
-  await product.populate({
-    path: "ratings",
-  });
+  if (!product) {
+    throw new CustomError(`No product found`, 404);
+  }
 
   sendResponse(res, "Product retrived successfully", product, 200);
 });
@@ -64,7 +58,6 @@ const createProduct = asyncErrorHandler(async (req, res) => {
   }
 
   const vendorShop = await VendorShop.findOne({ user: userId });
-  console.log("Vednor shop", vendorShop);
 
   const product = await Product.create({
     ...value,
@@ -83,7 +76,7 @@ const updateProduct = asyncErrorHandler(async (req, res) => {
 
   const productExist = await Product.findById(productId);
   if (!productExist) {
-    throw new CustomError("No product found with id", 404);
+    throw new CustomError("No product found ", 404);
   }
 
   const product = await Product.findOneAndUpdate({ _id: productId }, req.body, {
@@ -100,24 +93,9 @@ const updateProduct = asyncErrorHandler(async (req, res) => {
 
 const deleteProduct = asyncErrorHandler(async (req, res) => {
   const { id: productId } = req.params;
-  await Product.findOneAndDelete(productId);
-
-  res.status(200).json({
-    success: true,
-    message: "Product deleted successfully",
-    data: null,
-  });
+  await Product.findOneAndDelete({ _id: productId });
 
   sendResponse(res, "Product deleted successfully");
-});
-
-const getCategory = asyncErrorHandler(async (req, res) => {
-  const { field } = req.params;
-  console.log(field);
-
-  const product = await Product.find({ category: field });
-
-  console.log(product);
 });
 
 export {
@@ -126,5 +104,4 @@ export {
   createProduct,
   updateProduct,
   deleteProduct,
-  getCategory,
 };

@@ -8,8 +8,8 @@ const vendorShopSchema = new mongoose.Schema(
     },
     shopName: {
       type: String,
-      mixlength: [30, "Shop name cannot be more then 30"],
-      minlength: [3, "Shop name cannot be less then 2"],
+      mixlength: [30, "Shop name cannot be more then 30 character"],
+      minlength: [3, "Shop name cannot be less then 2 character"],
       required: [true, "Shop Name cannot be empty"],
       trim:true
     },
@@ -17,16 +17,14 @@ const vendorShopSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    ratings: {
-      type: String,
-    },
     shopRegistrationNumber: {
       type: String,
       required: true,
     },
     isVerified: {
-      type: Boolean,
-      default: false,
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending",
     },
   },
   {

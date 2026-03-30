@@ -2,7 +2,9 @@ import { Resend } from "resend";
 import asyncErrorHandler from "./asyncErrorHandler.js";
 import CustomError from "./CustomError.js";
 
-const sendEmail = asyncErrorHandler(async (options) => {
+const sendEmail = async (options) => {
+  console.log("Hitttttt");
+
   const resend = new Resend(process.env.EMAIL_API);
 
   const emailOptions = {
@@ -16,8 +18,8 @@ const sendEmail = asyncErrorHandler(async (options) => {
   if (error) {
     throw new CustomError("Filed to send resend-email", 500);
   }
-  console.log("Email sent successfully!");
-  console.log("Email ID:", data?.id);
-});
+  // console.log("Email sent successfully!");
+  // console.log("Email ID:", data?.id);
+};
 
 export default sendEmail;

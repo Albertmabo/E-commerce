@@ -4,6 +4,8 @@ import asyncErrorHandler from "../utils/asyncErrorHandler.js";
 import passowordResetValidation from "../validations/passwordResetReqest.validation.js";
 import sendEmail from "../utils/email.js";
 import { sendResponse } from "../utils/apiResponse.js";
+import crypto from "crypto";
+import signToken from "../utils/signToken.js";
 
 //@desc Create ForgetPassword
 //@rotute GET api/v1/auth/forget-password
@@ -26,6 +28,7 @@ const forgetPassword = asyncErrorHandler(async (req, res) => {
   }
 
   const resetToken = user.generateResetToken();
+
   await user.save({ validateBeforeSave: false });
 
   const resetUrl = `${req.protocol}://${req.get("host")}/api/v1/auth/reset-password/${resetToken}`;
@@ -54,4 +57,37 @@ const forgetPassword = asyncErrorHandler(async (req, res) => {
   }
 });
 
-export { forgetPassword };
+const resetPassword = asyncErrorHandler(async (req, res) => {
+  const token = crypto
+    .createHash("sha256")
+    .update(req.params.token)
+    .digest("hex");
+  console.log("ER", token);
+
+  const user = await User.findOne({
+    passwordResetToken: token,
+    passwordResetTokenExpiresAt: { $gt: Date.now() },
+  });
+  if (!user) {
+    throw new CustomError(
+      "No user found, please make password reset request again",
+      404,
+    );
+  }
+
+  user.password = req.body.password;
+  user.confirmPassword = req.body.confirmPassword;
+  user.passwordResetToken = undefined;
+  user.passwordResetTokenExpiresAt = undefined;
+  user.isPasswordChangedAt = Date.now();
+  await user.save({ validateBeforeSave: true });
+
+  const jwtToken = signToken(user._id);
+
+  res.status(201).json({
+    success: true,
+    jwtToken,
+  });
+});
+
+export { forgetPassword, resetPassword };

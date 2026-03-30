@@ -2,13 +2,14 @@ import express from "express";
 const router = express.Router();
 import rateLimiter from "../middlewares/rateLimiting.middleware.js";
 import { signUpUser, logInUser } from "../controllers/auth.controller.js";
-import {forgetPassword} from "../controllers/password.controller.js"
+import {forgetPassword, resetPassword} from "../controllers/password.controller.js"
 
 router.route("/signup").post(rateLimiter(6, 60 * 60 * 1000), signUpUser);
 router.route("/login").post(rateLimiter(6, 60 * 60 * 1000), logInUser);
 
 // password reset
 router.route('/forget-password').post(forgetPassword);
+router.route('/reset-password/:token').post(resetPassword);
 // router.route('/password-reset').post();
 
 export default router;

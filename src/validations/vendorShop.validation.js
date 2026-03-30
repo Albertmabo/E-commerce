@@ -12,13 +12,22 @@ const vendorShopInputValidation = Joi.object({
     "string.empty": "Shop address cannot be empty",
     "any.required": "Shop address cannot be empty",
   }),
-  ratings: Joi.string().optional(),
+
   shopRegistrationNumber: Joi.string().trim().required().messages({
     "string.base": "Shop registration number must be a string",
     "string.empty": "Shop registration number cannot be empty",
     "any.required": "Shop registration number is required",
   }),
-  isVerified: Joi.boolean().default(false),
+   isVerified: Joi.string()
+    .valid("pending", "approved", "rejected")
+    .default("pending")
+    .optional()
+    .messages({
+      "string.base": "Verification must be a string",
+      "any.only": "Verification must be one of the allowed values",
+    }),
+  
+  
 });
 
 export default vendorShopInputValidation;

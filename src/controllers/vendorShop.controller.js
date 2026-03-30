@@ -11,15 +11,13 @@ import { sendResponse } from "../utils/apiResponse.js";
 const getAllVendorShops = asyncErrorHandler(async (req, res) => {
   const { _id: userId } = req.user;
   const vendorShop = await VendorShop.findOne({ user: userId });
-    if (!vendorShop) {
+  if (!vendorShop) {
     throw new CustomError("VendorShop not found", 404);
   }
 
   await vendorShop.populate({
     path: "user",
   });
-
-
 
   sendResponse(res, "Vendor Shop retrived successfully", vendorShop, 200);
 });
@@ -30,17 +28,12 @@ const getAllVendorShops = asyncErrorHandler(async (req, res) => {
 
 const createVendorShop = asyncErrorHandler(async (req, res) => {
   const { _id: userId } = req.user;
-  console.log(userId);
 
-  // Check if the user exist
-  const user = await User.findOne({ _id: userId });
+  // Check if the user exist and the user role is vednor
+  const user = await User.findOne({ _id: userId, role: "vendor" });
 
   if (!user) {
-    throw new CustomError("User not found", 404);
-  }
-
-  if (user.role !== "vendor") {
-    throw new CustomError("User is not a vendor", 400);
+    throw new CustomError("User not found or nor authorized", 404);
   }
 
   // validation

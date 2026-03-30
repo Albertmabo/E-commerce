@@ -1,6 +1,8 @@
 import express from "express";
 import helmet from "helmet";
+
 const app = express();
+
 
 // routes import
 import rateLimiter from "./src/middlewares/rateLimiting.middleware.js";
@@ -16,8 +18,10 @@ import routeNotFound from "./src/middlewares/routeNotFound.middleware.js";
 import globalErrorHandler from "./src/middlewares/globalErrorHandler.middleware.js";
 
 // middleware
+
 app.use(helmet());
 app.use(express.json({ limit: "30kb" }));
+
 app.use("/api", rateLimiter(1000, 60 * 60 * 1000));
 // routes
 app.use("/api/v1/products", productRoutes);

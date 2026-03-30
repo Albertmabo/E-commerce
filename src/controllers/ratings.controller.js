@@ -41,7 +41,7 @@ const rateProduct = asyncErrorHandler(async (req, res) => {
     rating: req.body.rating,
     review: req.body.review,
   });
-  console.log(product.ratings);
+  
 
   if (!product.ratings) {
     product.ratings = [];

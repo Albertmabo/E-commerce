@@ -70,7 +70,7 @@ const productInputValidation = Joi.object({
 
   processor: Joi.string().trim().required().max(60).min(4).messages({
     "string.base": "Processor name must be string",
-    "any.required": "Processor name i required",
+    "any.required": "Processor name is required",
     "string.empty": "Processor name cannot be empty",
     "string.max": "Processor name cannot be greater then 60 characters",
     "string.min": "Processor name cannot be less then 3 character",
@@ -153,6 +153,14 @@ const productInputValidation = Joi.object({
   }),
 
   graphicCard: Joi.object({
+    cardName: Joi.string().trim().required().max(60).min(4).messages({
+      "string.base": "Card name must be string",
+      "any.required": "Card name is required",
+      "string.empty": "Card name cannot be empty",
+      "string.max": "Card name cannot be greater then 60 characters",
+      "string.min": "Card name cannot be less then 3 character",
+    }),
+
     graphicCardBrand: Joi.string()
       .trim()
       .valid("Intel", "AMD", "NVDIA")

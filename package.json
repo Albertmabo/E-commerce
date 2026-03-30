@@ -21,6 +21,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.0.1",
     "nodemailer": "^8.0.4",
+    "qs": "^6.15.0",
     "resend": "^6.9.4"
   },
   "devDependencies": {
