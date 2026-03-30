@@ -74,6 +74,8 @@ const logInUser = asyncErrorHandler(async (req, res) => {
 
   const isMatch = await user.comparePasswordInDb(password, user.password);
   if (!isMatch) {
+    console.log("rrr");
+    
     throw new CustomError("Invalid email or password", 401);
   }
 

@@ -4,8 +4,6 @@ import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 
 const protect = asyncErrorHandler(async (req, res, next) => {
-  console.log("HIT");
-  
   let testToken = req.headers.authorization;
   if (!testToken) {
     throw new CustomError("Please login or sighup", 401);

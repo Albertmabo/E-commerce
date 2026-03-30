@@ -8,7 +8,7 @@ import crypto from "crypto";
 import signToken from "../utils/signToken.js";
 
 //@desc Create ForgetPassword
-//@rotute GET api/v1/auth/forget-password
+//@rotute POST api/v1/auth/forget-password
 //@access Public
 
 const forgetPassword = asyncErrorHandler(async (req, res) => {
@@ -57,12 +57,14 @@ const forgetPassword = asyncErrorHandler(async (req, res) => {
   }
 });
 
+//@desc reset password
+//@rotute POST api/v1/auth/reset-password/:token
+//@access Public
 const resetPassword = asyncErrorHandler(async (req, res) => {
   const token = crypto
     .createHash("sha256")
     .update(req.params.token)
     .digest("hex");
-  console.log("ER", token);
 
   const user = await User.findOne({
     passwordResetToken: token,
@@ -90,4 +92,23 @@ const resetPassword = asyncErrorHandler(async (req, res) => {
   });
 });
 
-export { forgetPassword, resetPassword };
+//@desc update Password for Authenticaed Users
+//@rotute GET api/v1/auth/update-password
+//@access Users
+
+const updateAuthenticatedUserPassword = asyncErrorHandler(async (req, res) => {
+  const user = await User.findById(req.user._id).select("+password");
+  const isMatch = await user.comparePasswordInDb(
+    req.body.oldPassword,
+    user.password,
+  );
+  if (!isMatch) {
+    throw new CustomError("Password did not match", 401);
+  }
+  user.password = req.body.newPassword;
+  user.confirmPassword = req.body.confirmNewPassword;
+  await user.save({ validateBeforeSave: true });
+
+  sendResponse(res, "Password updated successful");
+});
+export { forgetPassword, resetPassword, updateAuthenticatedUserPassword };
