@@ -112,3 +112,4 @@ const updateAuthenticatedUserPassword = asyncErrorHandler(async (req, res) => {
   sendResponse(res, "Password updated successful");
 });
 export { forgetPassword, resetPassword, updateAuthenticatedUserPassword };
+  
