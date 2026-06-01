@@ -10,8 +10,6 @@ import { sendResponse } from "../utils/apiResponse.js";
 //@route POST api/v1/order
 //@access user
 const createOrder = asyncErrorHandler(async (req, res) => {
-  const { orderStatus } = req.body || {};
-
   const { _id: userId } = req.user;
 
   const user = await User.findById(userId);
@@ -29,51 +27,34 @@ const createOrder = asyncErrorHandler(async (req, res) => {
 
   const { items } = cart;
 
-  let product = items.map((values) => {
-    return {
-      productId: values.productId,
-      quantity: values.quantity,
-    };
+  let productId = items.map((items) => {
+    return items.productId;
   });
 
-  let total = 0;
+  const products = await Product.find({
+    _id: { $in: productId },
+  });
 
-  for (let i = 0; i < product.length; i++) {
-    let id = product[i].productId;
-
-    let p = await Product.findById(id);
-
-    if (p.discount) {
-      let cost = p.price * product[i].quantity;
-      total += cost - cost * (p.discount / 100);
-    } else {
-      total += p.price * product[i].quantity;
-    }
-  }
-
-  const orders = await Order.findOne({ user: userId });
-  let order;
-  if (!orders) {
-    order = await Order.create({
-      user: req.user._id,
-      items,
-      total,
-      orderStatus,
-    });
-  } else {
-    order = await Order.findOneAndUpdate(
-      { user: userId },
-      {
-        $set: { items, total, orderStatus },
-      },
-      {
-        new: true,
-        runValidators: true,
-      },
+  const total = items.reduce((acc, item) => {
+    const product = products.find(
+      (p) => p._id.toString() === item.productId.toString(),
     );
-  }
+    if (!product) return acc;
 
-  sendResponse(res, "Order places successfully", order, 201);
+    const cost = product.price * item.quantity;
+    return (
+      acc + (product.discount ? cost - cost * (product.discount / 100) : cost)
+    );
+  }, 0);
+
+  const order = await Order.create({
+    user: userId,
+    items,
+    total,
+    orderStatus: "Processing",
+  });
+
+  sendResponse(res, "Order placed successfully", order, 201);
 });
 
 //@desc create order

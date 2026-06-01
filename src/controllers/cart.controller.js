@@ -20,6 +20,12 @@ const createCart = asyncErrorHandler(async (req, res) => {
 
   const product = await Product.find({ _id: { $in: productId } });
 
+  // ensure every product exists
+  if (product.length !== productId.length) {
+    throw new CustomError("One or more products do not exist", 404);
+  }
+  // below is bad
+
   if (product.length === 0) {
     throw new CustomError("Product does not exist", 404);
   }
@@ -28,8 +34,6 @@ const createCart = asyncErrorHandler(async (req, res) => {
     user: userId,
     items,
   });
-
-  console.log(cart);
 
   sendResponse(res, "Cart created succssfully", cart, 200);
 });
@@ -76,7 +80,6 @@ const deleteCartItems = asyncErrorHandler(async (req, res) => {
     },
   );
 
-  console.log(cart);
   sendResponse(res, "Cart deleted successfully");
 });
 //@desc Update cart

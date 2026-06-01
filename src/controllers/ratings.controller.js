@@ -1,9 +1,10 @@
 import asyncErrorHandler from "../utils/asyncErrorHandler.js";
 import Payment from "../models/payment.js";
-import CustomError from "../error/CustomError.js";
+
 import Ratings from "../models/ratings.js";
 import Product from "../models/product.js";
 import { sendResponse } from "../utils/apiResponse.js";
+import CustomError from "../utils/CustomError.js"
 
 //@desc POST User review
 //@route post api/v1/ratings/:id
