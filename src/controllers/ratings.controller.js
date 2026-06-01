@@ -1,48 +1,52 @@
 import asyncErrorHandler from "../utils/asyncErrorHandler.js";
 import Payment from "../models/payment.js";
-
+import CustomError from "../utils/CustomError.js";
 import Ratings from "../models/ratings.js";
 import Product from "../models/product.js";
 import { sendResponse } from "../utils/apiResponse.js";
-import CustomError from "../utils/CustomError.js"
 
 //@desc POST User review
 //@route post api/v1/ratings/:id
 //@access User
 
 const rateProduct = asyncErrorHandler(async (req, res) => {
-  const { id: user } = req.user;
+  const { _id: userId } = req.user;
+  const productId = req.params.id;
 
-  const product = await Product.findOne({ _id: req.params.id });
+  const product = await Product.findOne({ _id: productId });
   if (!product) {
     throw new CustomError("There is no product with this id", 404);
   }
 
-  const isVerfied = await Payment.findOne({ user });
+  const isVerfied = await Payment.findOne({ user: userId }).populate({
+    path: "order",
+  });
+
+  let exist = isVerfied.order.items.map((val) => {
+    return val.productId;
+  });
+
+  let varifiedPurchase = exist.find((val) => {
+    return val.toString() === productId.toString();
+  });
+
   if (!isVerfied) {
     throw new CustomError("You have not purchesed this product yet", 404);
   }
-  /*
-  const isVerified = await Payment.findOne({ 
-  user, 
-  order: { $in: await Order.find({ "items.product": req.params.id }).select("_id") }
-});
-  */
 
-  if (!isVerfied.payment.paymentSuccess) {
+  if (!varifiedPurchase) {
     throw new CustomError(
       "You are not a verifid Buyer, only veried buyer can leve review ",
       400,
     );
   }
 
-  const rating = await Ratings.create({
-    user,
-    product,
+  const review = await Ratings.create({
+    user: userId,
+    product: productId,
     rating: req.body.rating,
     review: req.body.review,
   });
-  
 
   if (!product.ratings) {
     product.ratings = [];
@@ -51,7 +55,31 @@ const rateProduct = asyncErrorHandler(async (req, res) => {
   product.ratings.push(rating._id);
   await product.save();
 
-  sendResponse(res, "Product review successfully", rating, 200);
+  sendResponse(res, "Product review successfully", review, 201);
 });
 
-export { rateProduct };
+
+//@desc GET All review
+//@route post api/v1/ratings/
+//@access Admin
+
+const getAllRatings = asyncErrorHandler(async(req,res)=>{
+  const review = await Ratings.find({});
+
+  sendResponse(res,"Products Rating retrieved Successfully", review, 200)
+})
+
+//@desc GET all review a user left
+//@route post api/v1/ratings/:id
+//@access user
+
+const getRating = asyncErrorHandler(async(req,res)=>{
+  const { _id: userId } = req.user;
+  const review = await Ratings.find({user:userId});
+
+  sendResponse(res,"User Rating retrieved Successfully", review, 200)
+})
+
+
+
+export { rateProduct, getAllRatings, getRating};

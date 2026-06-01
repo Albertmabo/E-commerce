@@ -25,6 +25,8 @@ const ratingSchema = new mongoose.Schema({
   }
 });
 
+
+
 const Ratings = new mongoose.model("Ratings", ratingSchema)
 
 export default Ratings;
