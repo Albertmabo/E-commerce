@@ -11,7 +11,6 @@ const createPayment = asyncErrorHandler(async (req, res) => {
   const { _id: userId } = req.user;
 
   const { id: orderId } = req.params;
-  console.log(orderId);
 
   const order = await Order.findOne({ _id: orderId, user: userId });
 
@@ -24,8 +23,8 @@ const createPayment = asyncErrorHandler(async (req, res) => {
   if (transactionId) {
     // Mock In production, this would call Fonepay's verification API
     let tid = "FONEPAY_TXN_1748765432";
-    if (!transactionId === tid) {
-      throw new CustomError("invaid transactionId", 400);
+    if (!transactionId !== tid) {
+      throw new CustomError("Invaid transaction Id", 400);
     }
     pay = await Payment.create({
       user: userId,
@@ -63,7 +62,7 @@ const getPayment = asyncErrorHandler(async (req, res) => {
   });
 
   if (!pay) {
-    throw CustomError("No payment found", 404);
+    throw new CustomError("No payment found", 404);
   }
 
   sendResponse(res, "successful retrived", pay, 200);
