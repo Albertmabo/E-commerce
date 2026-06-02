@@ -12,7 +12,6 @@ import signToken from "../utils/signToken.js";
 //@access Public
 
 const forgetPassword = asyncErrorHandler(async (req, res) => {
-  // input validation
   const { error, value } = passowordResetValidation.validate(req.body, {
     abortEarly: true,
   });
@@ -109,7 +108,6 @@ const updateAuthenticatedUserPassword = asyncErrorHandler(async (req, res) => {
   user.confirmPassword = req.body.confirmNewPassword;
   await user.save({ validateBeforeSave: true });
 
-  sendResponse(res, "Password updated successful");
+  sendResponse(res, "Password updated successful", null, 200);
 });
 export { forgetPassword, resetPassword, updateAuthenticatedUserPassword };
-  

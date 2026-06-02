@@ -29,7 +29,6 @@ const getAllVendorShops = asyncErrorHandler(async (req, res) => {
 const createVendorShop = asyncErrorHandler(async (req, res) => {
   const { _id: userId } = req.user;
 
-  // Check if the user exist and the user role is vednor
   const user = await User.findOne({ _id: userId, role: "vendor" });
 
   if (!user) {
@@ -82,7 +81,7 @@ const deleteVendorShop = asyncErrorHandler(async (req, res) => {
 
   await VendorShop.findOneAndDelete({ user: userId });
 
-  sendResponse(res, "Vendor Shop Deleted successfully");
+  sendResponse(res, "Vendor Shop Deleted successfully", null, 204);
 });
 export {
   getAllVendorShops,

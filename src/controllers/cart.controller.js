@@ -20,11 +20,9 @@ const createCart = asyncErrorHandler(async (req, res) => {
 
   const product = await Product.find({ _id: { $in: productId } });
 
-  // ensure every product exists
   if (product.length !== productId.length) {
     throw new CustomError("One or more products do not exist", 404);
   }
-  // below is bad
 
   if (product.length === 0) {
     throw new CustomError("Product does not exist", 404);
@@ -35,7 +33,7 @@ const createCart = asyncErrorHandler(async (req, res) => {
     items,
   });
 
-  sendResponse(res, "Cart created succssfully", cart, 200);
+  sendResponse(res, "Cart created succssfully", cart, 201);
 });
 
 //@desc get cart
@@ -79,7 +77,7 @@ const deleteCartItems = asyncErrorHandler(async (req, res) => {
     },
   );
 
-  sendResponse(res, "Cart deleted successfully");
+  sendResponse(res, "Cart deleted successfully", null, 204);
 });
 //@desc Update cart
 //@route PATCH api/v1/cart/:id

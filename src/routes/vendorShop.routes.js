@@ -9,13 +9,13 @@ import {
 } from "../controllers/vendorShop.controller.js";
 
 import protect from "../middlewares/protect.middleware.js";
-import { vendorAccess, access } from "../middlewares/rbac.middleware.js";
+import rbac from "../middlewares/rbac.middleware.js";
 
 router
   .route("/")
-  .get(protect, access, getAllVendorShops)
-  .post(protect, vendorAccess, createVendorShop)
-  .patch(protect, vendorAccess, updatedVendorShop)
-  .delete(protect, access, deleteVendorShop);
+  .get(protect, rbac("vendor", "admin"), getAllVendorShops)
+  .post(protect, rbac("vendor"), createVendorShop)
+  .patch(protect, rbac("vendor"), updatedVendorShop)
+  .delete(protect, rbac("vendor", "admin"), deleteVendorShop);
 
 export default router;

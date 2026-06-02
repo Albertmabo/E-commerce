@@ -93,7 +93,7 @@ const deleteProduct = asyncErrorHandler(async (req, res) => {
   const { id: productId } = req.params;
   await Product.findOneAndDelete({ _id: productId });
 
-  sendResponse(res, "Product deleted successfully");
+  sendResponse(res, "Product deleted successfully", null, 204);
 });
 
 export {

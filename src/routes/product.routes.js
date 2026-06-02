@@ -1,11 +1,7 @@
 import express from "express";
 const router = express.Router();
 import protect from "../middlewares/protect.middleware.js";
-import {
-  vendorAccess,
-  access,
-  userAccess,
-} from "../middlewares/rbac.middleware.js";
+import rbac from "../middlewares/rbac.middleware.js";
 
 import {
   getAllProducts,
@@ -13,7 +9,6 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
-
 } from "../controllers/product.controller.js";
 
 import { rateProduct } from "../controllers/ratings.controller.js";
@@ -21,16 +16,13 @@ import { rateProduct } from "../controllers/ratings.controller.js";
 router
   .route("/")
   .get(getAllProducts)
-  .post(protect, vendorAccess, createProduct);
+  .post(protect, rbac("vendor"), createProduct);
 router
   .route("/:id")
   .get(getSingleProduct)
-  .patch(protect, vendorAccess, updateProduct)
-  .delete(protect, access, deleteProduct);
+  .patch(protect, rbac("vendor"), updateProduct)
+  .delete(protect, rbac("vendor", "admin"), deleteProduct);
 
-
-router.route("/ratings/:id").post(protect, userAccess, rateProduct);
-
-
+router.route("/ratings/:id").post(protect, rbac("user"), rateProduct);
 
 export default router;

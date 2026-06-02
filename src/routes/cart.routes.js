@@ -2,8 +2,8 @@ import express from "express";
 const router = express.Router();
 
 import protect from "../middlewares/protect.middleware.js";
-import { userAccess } from "../middlewares/rbac.middleware.js";
-
+import rbac from "../middlewares/rbac.middleware.js";
+// "admin", "user", "vendor"
 import {
   createCart,
   getCart,
@@ -12,11 +12,11 @@ import {
 } from "../controllers/cart.controller.js";
 router
   .route("/")
-  .get(protect, userAccess, getCart)
-  .post(protect, userAccess, createCart);
+  .get(protect, rbac("user"), getCart)
+  .post(protect, rbac("user"), createCart);
 
 router
   .route("/:id")
-  .patch(protect, userAccess, updateCart)
-  .delete(protect, userAccess, deleteCartItems);
+  .patch(protect, rbac("user"), updateCart)
+  .delete(protect, rbac("user"), deleteCartItems);
 export default router;
