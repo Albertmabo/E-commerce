@@ -58,7 +58,6 @@ const getCart = asyncErrorHandler(async (req, res) => {
 //@access user
 
 const deleteCartItems = asyncErrorHandler(async (req, res) => {
-  console.log("delete hit");
   const { id: productId } = req.params;
 
   const { _id: userId } = req.user;
@@ -86,7 +85,6 @@ const deleteCartItems = asyncErrorHandler(async (req, res) => {
 //@route PATCH api/v1/cart/:id
 //@access user
 const updateCart = asyncErrorHandler(async (req, res) => {
-  console.log("patch hit");
   const { quantity } = req.body;
   const { id: productId } = req.params;
 

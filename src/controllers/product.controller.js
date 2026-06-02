@@ -10,11 +10,9 @@ import qs from "qs";
 //@access Public
 
 const getAllProducts = asyncErrorHandler(async (req, res) => {
-
-    
   const products = await Product.find(req.query).populate({
-    path:"soldBy"
-  })
+    path: "soldBy",
+  });
 
   if (!products.length) {
     throw new CustomError(`There are not Products`, 404);

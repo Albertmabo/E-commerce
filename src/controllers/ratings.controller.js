@@ -11,7 +11,7 @@ import { sendResponse } from "../utils/apiResponse.js";
 
 const rateProduct = asyncErrorHandler(async (req, res) => {
   const { _id: userId } = req.user;
-  const productId = req.params.id;
+  const { id: productId } = req.params;
 
   const product = await Product.findOne({ _id: productId });
   if (!product) {
@@ -58,28 +58,25 @@ const rateProduct = asyncErrorHandler(async (req, res) => {
   sendResponse(res, "Product review successfully", review, 201);
 });
 
-
 //@desc GET All review
 //@route post api/v1/ratings/
 //@access Admin
 
-const getAllRatings = asyncErrorHandler(async(req,res)=>{
+const getAllRatings = asyncErrorHandler(async (req, res) => {
   const review = await Ratings.find({});
 
-  sendResponse(res,"Products Rating retrieved Successfully", review, 200)
-})
+  sendResponse(res, "Products Rating retrieved Successfully", review, 200);
+});
 
 //@desc GET all review a user left
 //@route post api/v1/ratings/:id
 //@access user
 
-const getRating = asyncErrorHandler(async(req,res)=>{
+const getRating = asyncErrorHandler(async (req, res) => {
   const { _id: userId } = req.user;
-  const review = await Ratings.find({user:userId});
+  const review = await Ratings.find({ user: userId });
 
-  sendResponse(res,"User Rating retrieved Successfully", review, 200)
-})
+  sendResponse(res, "User Rating retrieved Successfully", review, 200);
+});
 
-
-
-export { rateProduct, getAllRatings, getRating};
+export { rateProduct, getAllRatings, getRating };

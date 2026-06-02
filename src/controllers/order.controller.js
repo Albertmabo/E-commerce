@@ -60,7 +60,7 @@ const createOrder = asyncErrorHandler(async (req, res) => {
 //@desc create order
 //@route GET api/v1/order
 //@access user
-const getOrder = asyncErrorHandler(async (req, res) => {
+const getOrders = asyncErrorHandler(async (req, res) => {
   const order = await Order.findOne({ user: req.user.id });
 
   if (!order) {
@@ -70,5 +70,4 @@ const getOrder = asyncErrorHandler(async (req, res) => {
   sendResponse(res, "Order retrived successfully", order, 200);
 });
 
-
-export { createOrder, getOrder };
+export { createOrder, getOrders };

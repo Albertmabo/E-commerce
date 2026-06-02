@@ -11,15 +11,19 @@ const paymentSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: "Order",
     },
+    transactionId: {
+      type: String,
+    },
     payment: {
       paymentType: {
-        default: "COD",
         type: String,
         enum: ["COD", "MobileBanking"],
       },
-      paymentSuccess: {
-        type: Boolean,
-        default: false,
+
+      paymentStatus: {
+        type: String,
+        default: "PENDING",
+        enum: ["PENDING", "SUCCESS", "FAILED"],
       },
     },
   },
@@ -27,9 +31,9 @@ const paymentSchema = new mongoose.Schema(
 );
 
 paymentSchema.pre("save", function () {
-  if (this.payment.paymentType === "MobileBanking") {
-    this.payment.paymentSuccess = true;
-  }
+  this.payment.paymentType === "MobileBanking"
+    ? (this.payment.paymentStatus = "SUCCESS")
+    : (this.payment.paymentStatus = "PENDING");
 });
 
 const Payment = mongoose.model("Payment", paymentSchema);
